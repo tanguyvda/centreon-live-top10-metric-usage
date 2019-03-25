@@ -1,17 +1,19 @@
 function load_graph_apex(data, preferences) {
+console.log(data);
+console.log(preferences);
 
 // colors
-/*var colors = new Array();
+var colors = new Array();
 colors.push('#88b917');
 colors.push('#818285');
 colors.push('#e00b3d');
-colors.push('#818285');*/
+colors.push('#818285');
 
 var serie_data = new Array();
 var host_name = new Array();
 for (i in data) {
 
-	/*if (data[i].status == 0) {
+	if (data[i].status == 0) {
 		var bar_color = colors['0'];
 	} else if (data[i].status == 1) {
 		var bar_color = colors['1'];
@@ -19,11 +21,12 @@ for (i in data) {
 		var bar_color = colors['2'];
 	} else {
 		var bar_color = colors['3'];
-	}*/
+	}
 	
-	serie_data.push({'y':data[i].current_value, 'x':data[i].host_name});//, 'colors':bar_color});
+	serie_data.push({'y':data[i].current_value, 'x':data[i].host_name, 'colors':bar_color});
 	host_name.push(data[i].host_name);
 }
+console.log(serie_data);
 if (preferences.display_metric_value == 1) {
 	var display_metric_value = true;
 } else {
@@ -44,7 +47,7 @@ var options = {
                 enabled: display_metric_value,
                 position: 'top',
             },
-	    //colors: colors,
+	    colors: colors,
             series: [{
                 data: serie_data,
             }],

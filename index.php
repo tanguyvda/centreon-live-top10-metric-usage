@@ -101,11 +101,10 @@ $query .="AND i.host_id = acl.host_id "
 $query .="AND s.enabled = 1 "
         ."AND h.enabled = 1 "
         ."GROUP BY i.host_id "
-        ."ORDER BY current_value DESC "
+        ."ORDER BY current_value " . $preferences['order'] . " "
         ."LIMIT ".$preferences['nb_lin'].";";
 
 $numLine = 1;
-
 $res = $db->query($query);
 while ($row = $res->fetchRow()) {
   $row['numLin'] = $numLine;
