@@ -81,7 +81,13 @@ $template = new Smarty();
 $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
 
 $data = array();
-
+if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) || $preferences['host_group'] == '' ) {
+	$template->assign('error', "<center><div class='error' style='text-align:center;width:350px;'>you must set your hostgroup</div></center>");
+} elseif ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
+	$template->assign('error', "<center><div class='error' style='text-align:center;width:350px;'>you must set your service</div></center>");
+} elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
+	$template->assign('error', "<center><div class='error' style='text-align:center;width:350px;'>you must set your metric</div></center>");
+} else {
 $query = "SELECT i.host_name, i.service_description, i.service_id, i.host_id, m.current_value AS current_value, s.state AS status, m.unit_name AS unit "
         ."FROM metrics m, hosts h "
         .($preferences['host_group'] ? ", hosts_hostgroups hg " : "")
@@ -111,7 +117,7 @@ while ($row = $res->fetchRow()) {
   $data[] = $row;
   $numLine++;
 }
-
+}
 $template->assign('preferences', $preferences);
 $template->assign('widgetId', $widgetId);
 $template->assign('autoRefresh', $autoRefresh);
