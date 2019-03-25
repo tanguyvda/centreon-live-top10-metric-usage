@@ -14,13 +14,14 @@
 	{/literal}
 </head>
 <body>
-{assign var='arr' value=$data|@json_encode}
+{assign var='adata' value=$data|@json_encode}
+{assign var='apreferences' value=$preferences|@json_encode}
 <div id="chart">
     </div>
   <script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
   <script type="text/javascript" src="src/apexcharts_test.js"></script>
   <script>
-  load_graph_apex({$arr})
+  load_graph_apex({$adata}, {$apreferences})
   </script>
      <script>
 	  var widgetId = "{$widgetId}";
