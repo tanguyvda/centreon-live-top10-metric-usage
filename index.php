@@ -76,7 +76,7 @@ if ($centreon->user->admin == 0) {
   $grouplistStr = $access->getAccessGroupsString();
 }
 
-$path = $centreon_path . "www/widgets/tanguy-live-top10-metric-usage/src/";
+$path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
 $template = new Smarty();
 $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
 

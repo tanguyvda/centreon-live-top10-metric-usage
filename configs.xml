@@ -4,11 +4,11 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.1</version>
+        <version>18.10.2</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
-        <thumbnail>./widgets/tanguy-live-top10-metric-usage/resources/logo1.png</thumbnail>
-        <url>./widgets/tanguy-live-top10-metric-usage/index.php</url>
+        <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
+        <url>./widgets/centreon-live-top10-metric-usage/index.php</url>
         <autoRefresh>10</autoRefresh>
 	<preferences>
         <preference label="Height (pixels)" name="height" defaultValue="500" type="text"/>
