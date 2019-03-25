@@ -82,7 +82,7 @@ $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
 
 $data = array();
 
-$query = "SELECT i.host_name, i.service_description, i.service_id, i.host_id, AVG(m.current_value) AS current_value, s.state AS status, m.unit_name AS unit "
+$query = "SELECT i.host_name, i.service_description, i.service_id, i.host_id, m.current_value AS current_value, s.state AS status, m.unit_name AS unit "
         ."FROM metrics m, hosts h "
         .($preferences['host_group'] ? ", hosts_hostgroups hg " : "")
         .($centreon->user->admin == 0 ? ", centreon_acl acl " : "")
@@ -109,7 +109,6 @@ $numLine = 1;
 $res = $db->query($query);
 while ($row = $res->fetchRow()) {
   $row['numLin'] = $numLine;
-  $row['current_value'] = ceil($row['current_value']);
   $data[] = $row;
   $numLine++;
 }
