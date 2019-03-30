@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.7</version>
+        <version>18.10.11</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -13,7 +13,7 @@
 	<preferences>
         <preference label="Height (pixels)" name="height" defaultValue="500" type="text"/>
 	<preference label="Display metric value" name="display_metric_value" defaultValue="1" type="boolean"/>
-        <preference label="Host Group Name" name="host_group" defaultValue="" type="hostgroup" header="Resource"/>
+        <preference label="Host Group Name" name="host_group" defaultValue="" type="hostGroupMulti" header="Resource"/>
 	    <preference label="Service Description" name="service_description" defaultValue="" type="text" header="Filter"/>
 	    <preference label="Metric Name" name="metric_name" defaultValue="" type="text"/>
 	    <preference label="Results" name="nb_lin" defaultValue="10" type="text"/>
