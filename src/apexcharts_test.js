@@ -1,57 +1,94 @@
-function load_graph_apex(data, preferences) {
+function load_graph_apex(widget_data, preferences) {
 
-// colors
-/*var colors = new Array();
-colors.push('#88b917');
-colors.push('#818285');
-colors.push('#e00b3d');
-colors.push('#818285');*/
 
 var serie_data = new Array();
 var host_name = new Array();
-for (i in data) {
-
-	/*if (data[i].status == 0) {
-		var bar_color = colors['0'];
-	} else if (data[i].status == 1) {
-		var bar_color = colors['1'];
-	} else if (data[i].status == 2) {
-		var bar_color = colors['2'];
-	} else {
-		var bar_color = colors['3'];
-	}*/
-	
-	serie_data.push({'y':data[i].current_value, 'x':data[i].host_name});//, 'colors':bar_color});
-	host_name.push(data[i].host_name);
+var graph_data = new Array()
+for (i in widget_data) {
+	serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name});//, 'colors':bar_color});
+	host_name.push(widget_data[i].host_name);
 }
+
+console.log(serie_data);
 if (preferences.display_metric_value == 1) {
 	var display_metric_value = true;
 } else {
 	var display_metric_value = false;
+}
+
+if (preferences.animation_type == "") {
+	var animation_type = "easeinout";
+} else {
+	var animation_type = preferences.animation_type;
+}
+
+if (preferences.datalabels_pos == "") {
+	var datalabels_pos = "center";
+} else { 
+	var datalabels_pos = preferences.datalabels_pos;
+}
+
+if (preferences.title_pos == "") {
+	var title_pos = "center";
+} else {
+	var title_pos = preferences.title_pos;
+}
+
+if (preferences.subtitle_pos == "") {
+	var subtitle_pos = "center";
+} else { 
+	var subtitle_pos = preferences.subtitle_pos;
+}
+
+if (preferences.chart_title == "") {
+	var chart_title = undefined;
+} else {
+	var chart_title = preferences.chart_title;
+}
+
+if (preferences.chart_subtitle == "") {
+	var chart_subtitle = undefined;
+} else { 
+	var chart_subtitle = preferences.chart_subtitle;
 }
 	
 var options = {
 	chart: {
 		height: preferences.height,
                 type: 'bar',
+		animations: {
+			enabled: preferences.enable_animations,
+			easing: animation_type,
+			animategradually: {
+				enabled: preferences.enable_animation,
+			}
+		}
             },
 	plotOptions: {
-                bar: {
-                	horizontal: true,
+        	bar: {
+                	horizontal: preferences.bar_orientation,
                 }
             },
-            dataLabels: {
+        dataLabels: {
                 enabled: display_metric_value,
-                position: 'top',
-            },
+                textAnchor: datalabels_pos,
+        },
+	title: {
+		text: chart_title,
+		align: title_pos,
+	},
+	subtitle: {
+		text: chart_subtitle,
+		align: subtitle_pos
+	},
+	legend: {
+		show: preferences.enable_legend,
+	},
 	    //colors: colors,
-            series: [{
-                data: serie_data,
-            }],
-            xaxis: {
-                categories: host_name,
-            }
-        }
+        series: [{
+		data:serie_data,
+	}],
+}
 
        var chart = new ApexCharts(
             document.querySelector("#chart"),
