@@ -1,4 +1,4 @@
-function load_graph_apex(widget_data, preferences) {
+function load_graph_apex(widget_data, preferences, widget_width) {
 
 
 var serie_data = new Array();
@@ -7,7 +7,6 @@ var graph_data = new Array();
 var standard_wthreshold = widget_data[0].warning;
 var standard_cthreshold = widget_data[0].critical;
 var standard_unit = widget_data[0].unit;
-console.log(widget_data[0].unit);
 for (i in widget_data) {
 	serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name});//, 'colors':bar_color});
 	host_name.push(widget_data[i].host_name);
@@ -24,8 +23,6 @@ for (i in widget_data) {
 /*
 SERIE OPTIONS
 */
-console.log(widget_data);
-
 /*
 CHART OPTIONS
 */
@@ -156,7 +153,6 @@ if (standard_unit != "") {
 	var xaxis_title = preferences.service_description;
 }
 
-console.log(preferences);	
 var options = {
 	chart: {
 		height: preferences.height,
@@ -176,7 +172,9 @@ var options = {
 			dynamicAnimation: {
 				enabled: enable_animations,
 			},
-		}
+		},
+		
+		width: widget_width,
             },
 	plotOptions: {
         	bar: {

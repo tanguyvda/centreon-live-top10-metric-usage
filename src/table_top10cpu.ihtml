@@ -14,6 +14,9 @@
 	{/literal}
 </head>
 <body>
+<script type="text/javascript" src="../../include/common/javascript/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../include/common/javascript/jquery/jquery-ui.js"></script>
+<script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
 {if $error != ""}
 	{$error}
 {else}
@@ -22,10 +25,10 @@
 <div id="chart">
 </div>
    {if $data != ""} 
-	  <script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
+	<script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
 	  <script type="text/javascript" src="src/apexcharts_test.js"></script>
 	<script>
-	  load_graph_apex({$adata}, {$apreferences})
+	  load_graph_apex({$adata}, {$apreferences}, window.innerWidth);
 	  </script>
     {else}
 <div>missing data</div>
@@ -35,9 +38,6 @@
 	  var widgetId = "{$widgetId}";
 	  var autoRefresh = "{$autoRefresh}";
 	  </script>
-	<script type="text/javascript" src="../../include/common/javascript/jquery/jquery.js"></script>
-	<script type="text/javascript" src="../../include/common/javascript/jquery/jquery-ui.js"></script>
-	<script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
     <script>
     parent.iResize(window.name, "{$preferences.height}");
     </script>
