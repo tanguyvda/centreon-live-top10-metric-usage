@@ -7,6 +7,10 @@ var graph_data = new Array();
 var standard_wthreshold = widget_data[0].warning;
 var standard_cthreshold = widget_data[0].critical;
 var standard_unit = widget_data[0].unit;
+
+var height = preferences.height - 20;
+var width = widget_width - 20;
+
 for (i in widget_data) {
 	serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name});//, 'colors':bar_color});
 	host_name.push(widget_data[i].host_name);
@@ -174,7 +178,8 @@ var options = {
 			},
 		},
 		
-		width: widget_width,
+		width: width,
+		height: height,
             },
 	plotOptions: {
         	bar: {
