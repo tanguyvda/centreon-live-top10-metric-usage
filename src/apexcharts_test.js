@@ -11,8 +11,27 @@ var standard_unit = widget_data[0].unit;
 var height = preferences.height - 20;
 var width = widget_width - 20;
 
+/*
+SERIE OPTIONS
+*/
+
+//building serie data
 for (i in widget_data) {
-	serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name});//, 'colors':bar_color});
+
+	//selecting color
+	if (preferences.enable_status_color == "1") {
+		if (widget_data[i].status == "2") {
+        	        bar_color = "#ed1c24";
+	        } else if (widget_data[i].status == "1") {
+			bar_color = "#ff9913";
+		} else {
+			bar_color = "#87bd23";
+		};
+	} else {
+		bar_color = "#2E93fA";
+	};
+
+	serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name, 'fillColor': bar_color});//, 'colors':bar_color});
 	host_name.push(widget_data[i].host_name);
 	
 	if (widget_data[i].warning != standard_wthreshold) {
@@ -24,6 +43,7 @@ for (i in widget_data) {
 	}
 }
 
+console.log(serie_data);
 /*
 SERIE OPTIONS
 */
@@ -230,6 +250,7 @@ if (preferences.enable_annotations == "1") {
                         x: standard_wthreshold,
                         strokeDashArray: annotations_style,
                         borderColor: "#FEB019",
+					opacity: 0.4,
                         label: {
                                 borderColor: "#FEB019",
                                 style: {
@@ -248,19 +269,22 @@ if (preferences.enable_annotations == "1") {
 			x: standard_cthreshold,
                         strokeDashArray: annotations_style,
                         borderColor: "#FF4560",
-                        label: {
+			label: {
                                 borderColor: "#FF4560",
                                 style: {
                                         color: "#fff",
                                         background: "#FF4560",
-                                },
-                                orientation: "vertical",
-                                text: annotations_label_critical,
+				},
+				orientation: "vertical",
+				borderWidth: 0,
+				offsetY: -200,
+                                text: undefined, // annotations_label_critical, //annotations_label_critical,
                                 position: annotations_pos,
-                        }
+			},
 		});
 	}
-
+	
+	console.log(annotations_xaxis);
 	chart.updateOptions({
 	annotations: {
 		xaxis: annotations_xaxis,

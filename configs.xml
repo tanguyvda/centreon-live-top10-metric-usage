@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.20</version>
+        <version>18.10.21</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -20,6 +20,7 @@
 		<option value="DESC" label="DESC"/>
 	</preference>
 	<preference label="Chart title (leave empty if not required)" name="chart_title" defaultValue="" type="text" header="Chart options"/>
+	<preference label="Change bar color depending on the service status" name="enable_status_color" defaultValue="0" type="boolean"/>
 	<preference label="Title alignement" name="title_pos" defaultValue="center" type="list">
 		<option value="center" label="center"/>
 		<option value="left" label="left"/>
