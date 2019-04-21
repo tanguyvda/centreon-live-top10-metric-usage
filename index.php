@@ -95,7 +95,9 @@ $query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
 	i.host_id, 
 	m.current_value AS current_value, 
 	s.state AS status, 
-	m.unit_name AS unit ";
+	m.unit_name AS unit,
+	m.warn AS warning,
+	m.crit AS critical ";
 
 $query .= " FROM metrics m,
 	hosts h"
@@ -139,7 +141,6 @@ $query .="AND s.enabled = 1 "
         ."GROUP BY i.host_id "
         ."ORDER BY current_value " . $preferences['order'] . " "
         ."LIMIT ".$preferences['nb_lin'].";";
-
 $numLine = 1;
 $res = $db->prepare($query);
 foreach ($mainQueryParameters as $parameter) {

@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.15</version>
+        <version>18.10.20</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -41,13 +41,23 @@
 	<preference label="Enable toolbar" name="enable_toolbar" defaultValue="1" type="boolean"/>
 	<preference label="Display legend" name="display_legend" defaultValue="1" type="boolean"/>
 	<preference label="Horizontal bar" name="bar_orientation" defaultValue="1" type="boolean"/>
-	<preference label="Enable data labels" name="enable_datalabels" defaultValue="1" type="boolean"/>
 	<preference label="Data labels position" name="datalabels_pos" defaultValue="center" type="list">
-		<option value="bottom" label="bottom"/>
-		<option value="center" label="center"/>
-		<option value="top" label="top"/>
+		<option value="start" label="start"/>
+		<option value="middle" label="middle"/>
+		<option value="end" label="end"/>
 	</preference>
 	<preference label="Display metric value" name="display_metric_value" defaultValue="1" type="boolean"/>
+	<preference label="Enable tooltip" name="enable_tooltip" defaultValue="1" type="boolean"/>
+	<preference label="Display annotations" name="enable_annotations" defaultValue="1" type="boolean" header="annotations"/>
+	<preference label="Display annotations label" name="enable_annotations_label" defaultValue="0" type="boolean"/>
+	<preference label="Annotations style" name="annotations_style" defaultValue="full" type="list">
+		<option value="full" label="full"/>
+		<option value="dashed" label="dashed"/>
+	</preference>
+	<preference label="Annotations position" name="annotations_pos" defaultValue="top" type="list">
+		<option value="top" label="top"/>
+		<option value="bottom" label="bottom"/>
+	</preference>
         <preference label="Height (pixels)" name="height" defaultValue="500" type="text" header="Widget options"/>
         <preference label="Refresh Interval (seconds)" name="refresh_interval" defaultValue="30" type="text"/>
 	</preferences>
