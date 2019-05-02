@@ -1,13 +1,12 @@
 function load_graph_apex(widget_data, preferences, widget_width) {
 
-console.log(widget_data);
 var serie_data = new Array();
 var host_name = new Array();
 var graph_data = new Array();
 var standard_wthreshold = widget_data[0].warning;
 var standard_cthreshold = widget_data[0].critical;
 var standard_unit = widget_data[0].unit;
-
+console.log(preferences);
 var height = preferences.height - 20;
 var width = widget_width - 20;
 
@@ -43,7 +42,6 @@ for (i in widget_data) {
 	}
 }
 
-console.log(serie_data);
 /*
 SERIE OPTIONS
 */
@@ -284,7 +282,6 @@ if (preferences.enable_annotations == "1") {
 		});
 	}
 	
-	console.log(annotations_xaxis);
 	chart.updateOptions({
 	annotations: {
 		xaxis: annotations_xaxis,

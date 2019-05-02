@@ -1,45 +1,43 @@
 <html>
 <head>
-	<title>live-top10-cpu-usage</title>
+	<title>centreon-live-top10-metric-usage</title>
 	<link href="../../Themes/Centreon-2/style.css" type="text/css"/>
 	<link href="../../Themes/Centreon-2/Color/blue_css.php" rel="stylesheet" text="text/css"/>
 	{literal}
-	<style type="text/css">
-	  .ListTable {font-size:11px;border-color: #BFD0E2;}                                                                                                                                     
-	</style>
-	<style>
-	  @import url('src/top10_cpu.css');
-	  @import url('../../Themes/Centreon-2/style.css');
-	</style>
+	    <style type="text/css">
+	        .ListTable {font-size:11px;border-color: #BFD0E2;}
+        </style>
+	    <style>
+	        @import url('src/top10_cpu.css');
+	        @import url('../../Themes/Centreon-2/style.css');
+	    </style>
 	{/literal}
 </head>
 <body>
-<script type="text/javascript" src="../../include/common/javascript/jquery/jquery.js"></script>
-<script type="text/javascript" src="../../include/common/javascript/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
-{if $error != ""}
-	{$error}
-{else}
-{assign var='adata' value=$data|@json_encode}
-{assign var='apreferences' value=$preferences|@json_encode}
-<div id="chart">
-</div>
-   {if $data != ""} 
-	<script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
-	  <script type="text/javascript" src="src/apexcharts_test.js"></script>
-	<script>
-	  load_graph_apex({$adata}, {$apreferences}, window.innerWidth);
-	  </script>
+    <script type="text/javascript" src="../../include/common/javascript/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../include/common/javascript/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
+    {if $error != ""}
+	    {$error}
     {else}
-<div>missing data</div>
-	{/if}
-{/if}
-     <script>
-	  var widgetId = "{$widgetId}";
-	  var autoRefresh = "{$autoRefresh}";
-	  </script>
+        {assign var='adata' value=$data|@json_encode}
+        {assign var='apreferences' value=$preferences|@json_encode}
+        <div id="chart">
+        </div>
+        {if $data != ""} 
+	        <script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
+	        <script type="text/javascript" src="src/apexcharts_test.js"></script>
+	        <script>
+	            load_graph_apex({$adata}, {$apreferences}, window.innerWidth);
+	        </script>
+        {else}
+            <div>missing data</div>
+	    {/if}
+    {/if}
     <script>
-    parent.iResize(window.name, "{$preferences.height}");
+        parent.iResize(window.name, "{$preferences.height}");
+        var refresh_interval = "{$preferences.refresh_interval}";
     </script>
+    <script type="text/javascript" src="src/data_js.js"></script>
 </body>
 </html>
