@@ -1,6 +1,6 @@
 function load_graph_apex(widget_data, preferences, widget_width) {
 
-
+console.log(widget_data);
 var serie_data = new Array();
 var host_name = new Array();
 var graph_data = new Array();
