@@ -1,43 +1,43 @@
-function load_graph_apex(widget_data, preferences, widget_width) {
+function loadGraph(widgetData, preferences, windowWidth) {
 
-	var serie_data = new Array();
-	var host_name = new Array();
-	var graph_data = new Array();
-	var standard_wthreshold = widget_data[0].warning;
-	var standard_cthreshold = widget_data[0].critical;
-	var standard_unit = widget_data[0].unit;
+	var serieData = new Array();
+	var hostName = new Array();
+	var graphData = new Array();
+	var standardWarningThreshold = widgetData[0].warning;
+	var standardCriticalThreshold = widgetData[0].critical;
+	var standardUnit = widgetData[0].unit;
 	var height = preferences.height - 20;
-	var width = widget_width - 20;
+	var width = windowWidth - 20;
 
 	/*
 	SERIE OPTIONS
 	*/
 
 	//building serie data
-	for (i in widget_data) {
+	for (i in widgetData) {
 
 		//selecting color
 		if (preferences.enable_status_color == "1") {
-			if (widget_data[i].status == "2") {
-				bar_color = "#ed1c24";
-			} else if (widget_data[i].status == "1") {
-				bar_color = "#ff9913";
+			if (widgetData[i].status == "2") {
+				barColor = "#ed1c24";
+			} else if (widgetData[i].status == "1") {
+				barColor = "#ff9913";
 			} else {
-				bar_color = "#87bd23";
+				barColor = "#87bd23";
 			};
 		} else {
-			bar_color = "#2E93fA";
+			barColor = "#2E93fA";
 		};
 
-		serie_data.push({'name':widget_data[i].host_name, 'y':widget_data[i].current_value, 'x':widget_data[i].host_name, 'fillColor': bar_color});
-		host_name.push(widget_data[i].host_name);
+		serieData.push({'name':widgetData[i].host_name, 'y':widgetData[i].current_value, 'x':widgetData[i].host_name, 'fillColor': barColor});
+		hostName.push(widgetData[i].host_name);
 
-		if (widget_data[i].warning != standard_wthreshold) {
-			var enable_wthreshold = "0";
+		if (widgetData[i].warning != standardWarningThreshold) {
+			var enableWarningThreshold = "0";
 		}
 
-		if (widget_data[i].critical != standard_cthreshold) {
-			var enable_cthreshold = "0";
+		if (widgetData[i].critical != standardCriticalThreshold) {
+			var enableCriticalThreshold = "0";
 		}
 	}
 
@@ -47,22 +47,22 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 
 	//animations
 	if (preferences.enable_animations == "0") {
-		var enable_animations = false;
+		var enableAnimations = false;
 	} else {
-		var enable_animations = true;
+		var enableAnimations = true;
 	}
 
 	if (preferences.animation_type == "") {
-		var animation_type = "easeinout";
+		var animationType = "easeinout";
 	} else {
-		var animation_type = preferences.animation_type;
+		var animationType = preferences.animation_type;
 	}
 
 	//toolbar
 	if (preferences.enable_toolbar == "0") {
-	        var enable_toolbar = false;
+	        var enableToolbar = false;
 	} else {
-	        var enable_toolbar = true;
+	        var enableToolbar = true;
 	}
 
 	/*
@@ -75,62 +75,62 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 
 	//title
 	if (preferences.title_pos == "") {
-		var title_pos = "center";
+		var titlePosition = "center";
 	} else {
-		var title_pos = preferences.title_pos;
+		var titlePosition = preferences.title_pos;
 	}
 
 	if (preferences.chart_title == "") {
-	        var chart_title = undefined;
+	        var chartTitle = undefined;
 	} else {
-	        var chart_title = preferences.chart_title;
+	        var chartTitle = preferences.chart_title;
 	}
 
 
 	//subtitle
 	if (preferences.subtitle_pos == "") {
-		var subtitle_pos = "center";
+		var subtitlePosition = "center";
 	} else {
-		var subtitle_pos = preferences.subtitle_pos;
+		var subtitlePosition = preferences.subtitle_pos;
 	}
 
 	if (preferences.chart_subtitle == "") {
-		var chart_subtitle = undefined;
+		var chartSubtitle = undefined;
 	} else {
-		var chart_subtitle = preferences.chart_subtitle;
+		var chartSubtitle = preferences.chart_subtitle;
 	}
 
 	/*
 	LEGEND OPTIONS
 	*/
 	if (preferences.enable_legend == "0") {
-		var enable_legend = false;
+		var enableLegend = false;
 	} else {
-		var enable_legend = true;
+		var enableLegend = true;
 	}
 
 	/*
 	DATALABELS OPTIONS
 	*/
 	if (preferences.display_metric_value == "0") {
-		var display_metric_value = false;
+		var displayMetricValue = false;
 	} else {
-		var display_metric_value = true;
+		var displayMetricValue = true;
 	}
 
 	if (preferences.datalabels_pos == "") {
-	        var datalabels_pos = "middle";
+	        var datalabelsPosition = "middle";
 	} else {
-	        var datalabels_pos = preferences.datalabels_pos;
+	        var datalabelsPosition = preferences.datalabels_pos;
 	}
 
 	/*
 	TOOLTIP OPTIONS
 	*/
 	if (preferences.enable_tooltip == "0") {
-		var enable_tooltip = false;
+		var enableTooltip = false;
 	} else {
-		var enable_tooltip = true;
+		var enableTooltip = true;
 	}
 
 	/*
@@ -139,25 +139,25 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 
 	//annotations position
 	if (preferences.annotations_pos == "") {
-		var annotations_pos = "bottom";
+		var annotationsPosition = "bottom";
 	} else {
-		var annotations_pos = preferences.annotations_pos;
+		var annotationsPosition = preferences.annotations_pos;
 	}
 
 	//annotations style
 	if (preferences.annotations_style == "" || preferences.annotations_style == "dashed") {
-		var annotations_style = "5";
+		var annotationsStyle = "5";
 	} else {
-		var annotations_style = "0";
+		var annotationsStyle = "0";
 	}
 
 	//annotations label
 	if (preferences.enable_annotations_label == "1") {
-		var annotations_label_warning = "warning";
-		var annotations_label_critical = "critical";
+		var annotationsLabelWarning = "warning";
+		var annotationsLabelCritical = "critical";
 	} else {
-		var annotations_label_warning = "";
-		var annotations_label_critical = "";
+		var annotationsLabelWarning = "";
+		var annotationsLabelCritical = "";
 	}
 
 	/*
@@ -165,10 +165,10 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 	*/
 
 	//xaxis title
-	if (standard_unit != "") {
-		var xaxis_title = preferences.service_description + " (" + standard_unit + ")";
+	if (standardUnit != "") {
+		var xaxisTitle = preferences.service_description + " (" + standardUnit + ")";
 	} else {
-		var xaxis_title = preferences.service_description;
+		var xaxisTitle = preferences.service_description;
 	}
 
 
@@ -180,19 +180,19 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 			height: preferences.height,
             type: 'bar',
 			toolbar: {
-				show: enable_toolbar,
+				show: enableToolbar,
 				tools: {
 					download: true,
 				},
 			},
 			animations: {
-				enabled: enable_animations,
-				easing: animation_type,
+				enabled: enableAnimations,
+				easing: animationType,
 				animateGradually: {
-					enabled: enable_animations,
+					enabled: enableAnimations,
 				},
 				dynamicAnimation: {
-					enabled: enable_animations,
+					enabled: enableAnimations,
 				},
 			},
 			width: width,
@@ -204,25 +204,25 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 	            }
 	        },
 	        dataLabels: {
-                enabled: display_metric_value,
-                textAnchor: datalabels_pos,
+                enabled: displayMetricValue,
+                textAnchor: datalabelsPosition,
 	        },
 		title: {
-			text: chart_title,
-			align: title_pos,
+			text: chartTitle,
+			align: titlePosition,
 		},
 		subtitle: {
-			text: chart_subtitle,
-			align: subtitle_pos
+			text: chartSubtitle,
+			align: subtitlePosition,
 		},
 		legend: {
-			show: enable_legend,
+			show: enableLegend,
 		},
 		tooltip: {
-			enabled: enable_tooltip,
+			enabled: enableTooltip,
 		},
 	        series: [{
-			data:serie_data,
+			data:serieData,
 		}],
 		yaxis: {
 			title: {
@@ -231,7 +231,7 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 		},
 		xaxis: {
 			title: {
-				text: xaxis_title,
+				text: xaxisTitle,
 			},
 		},
 	}
@@ -241,11 +241,11 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 	chart.render();
 
 	if (preferences.enable_annotations == "1") {
-		var annotations_xaxis = new Array();
-		if (widget_data.warning != "" && enable_wthreshold != "0" ) {
-			annotations_xaxis.push({
-   				x: standard_wthreshold,
-                strokeDashArray: annotations_style,
+		var annotationsXaxis = new Array();
+		if (widgetData.warning != "" && enableWarningThreshold != "0" ) {
+			annotationsXaxis.push({
+   				x: standardWarningThreshold,
+                strokeDashArray: annotationsStyle,
                 borderColor: "#FEB019",
                 label: {
                 	borderColor: "#FEB019",
@@ -254,16 +254,16 @@ function load_graph_apex(widget_data, preferences, widget_width) {
                         background: "#FEB019",
                     },
                     orientation: "vertical",
-                    text: annotations_label_warning,
-                    position: annotations_pos,
+                    text: annotationsLabelWarning,
+                    position: annotationsPosition,
 				}
 			});
 		}
 
-		if (widget_data.critical != "" && enable_cthreshold != "0") {
-			annotations_xaxis.push({
-				x: standard_cthreshold,
-                strokeDashArray: annotations_style,
+		if (widgetData.critical != "" && enableCriticalThreshold != "0") {
+			annotationsXaxis.push({
+				x: standardCriticalThreshold,
+                strokeDashArray: annotationsStyle,
                 borderColor: "#FF4560",
 				label: {
 	                borderColor: "#FF4560",
@@ -272,16 +272,16 @@ function load_graph_apex(widget_data, preferences, widget_width) {
 	                        background: "#FF4560",
 						},
 					orientation: "vertical",
-	                text: annotations_label_critical,
-	                position: annotations_pos,
+	                text: annotationsLabelCritical,
+	                position: annotationsPosition,
 				},
 			});
 		}
 
 		chart.updateOptions({
 		annotations: {
-			xaxis: annotations_xaxis,
+			xaxis: annotationsXaxis,
 	        },
-		}, enable_animations, enable_animations);
+		}, enableAnimations, enableAnimations);
 	};
 }

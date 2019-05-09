@@ -1,17 +1,7 @@
 <html>
 <head>
 	<title>centreon-live-top10-metric-usage</title>
-	<link href="../../Themes/Centreon-2/style.css" type="text/css"/>
-	<link href="../../Themes/Centreon-2/Color/blue_css.php" rel="stylesheet" text="text/css"/>
-	{literal}
-	    <style type="text/css">
-	        .ListTable {font-size:11px;border-color: #BFD0E2;}
-        </style>
-	    <style>
-	        @import url('src/chart.css');
-	        @import url('../../Themes/Centreon-2/style.css');
-	    </style>
-	{/literal}
+	<link href="src/chart.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
     <script type="text/javascript" src="../../include/common/javascript/jquery/jquery.js"></script>
@@ -28,7 +18,7 @@
 	        <script type="text/javascript" src="resources/apexcharts.min.js" ></script>
 	        <script type="text/javascript" src="src/chart.js"></script>
 	        <script>
-	            load_graph_apex({$adata}, {$apreferences}, window.innerWidth);
+	            loadGraph({$adata}, {$apreferences}, window.innerWidth);
 	        </script>
         {else}
             <div>missing data</div>
