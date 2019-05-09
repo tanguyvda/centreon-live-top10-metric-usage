@@ -123,7 +123,6 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	} else {
         var datalabelsPosition = preferences.datalabels_pos;
 	}
-	console.log(datalabelsPosition);
 
 	/*
 	TOOLTIP OPTIONS
