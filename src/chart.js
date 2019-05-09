@@ -6,8 +6,8 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	var standardWarningThreshold = widgetData[0].warning;
 	var standardCriticalThreshold = widgetData[0].critical;
 	var standardUnit = widgetData[0].unit;
-	var height = preferences.height - 20;
-	var width = windowWidth - 20;
+	var height = preferences.height - 50;
+	var width = windowWidth - 30;
 
 	/*
 	SERIE OPTIONS
@@ -119,10 +119,11 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	}
 
 	if (preferences.datalabels_pos == "") {
-	        var datalabelsPosition = "middle";
+        var datalabelsPosition = "center";
 	} else {
-	        var datalabelsPosition = preferences.datalabels_pos;
+        var datalabelsPosition = preferences.datalabels_pos;
 	}
+	console.log(datalabelsPosition);
 
 	/*
 	TOOLTIP OPTIONS
@@ -201,12 +202,14 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		plotOptions: {
 	    	bar: {
             	horizontal: true,
-	            }
-	        },
-	        dataLabels: {
-                enabled: displayMetricValue,
-                textAnchor: datalabelsPosition,
-	        },
+				dataLabels: {
+					position: datalabelsPosition,
+				}
+            }
+	    },
+        dataLabels: {
+            enabled: displayMetricValue,
+        },
 		title: {
 			text: chartTitle,
 			align: titlePosition,

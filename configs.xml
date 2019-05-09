@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.21</version>
+        <version>18.10.23</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -41,11 +41,10 @@
 	</preference>
 	<preference label="Enable toolbar" name="enable_toolbar" defaultValue="1" type="boolean"/>
 	<preference label="Display legend" name="display_legend" defaultValue="1" type="boolean"/>
-	<preference label="Horizontal bar" name="bar_orientation" defaultValue="1" type="boolean"/>
-	<preference label="Data labels position" name="datalabels_pos" defaultValue="center" type="list">
-		<option value="start" label="start"/>
-		<option value="middle" label="middle"/>
-		<option value="end" label="end"/>
+	<preference label="Data labels position" name="datalabels_pos" defaultValue="" type="list">
+		<option value="bottom" label="start"/>
+		<option value="center" label="middle"/>
+		<option value="top" label="end"/>
 	</preference>
 	<preference label="Display metric value" name="display_metric_value" defaultValue="1" type="boolean"/>
 	<preference label="Enable tooltip" name="enable_tooltip" defaultValue="1" type="boolean"/>
