@@ -157,4 +157,4 @@ $template->assign('preferences', $preferences);
 $template->assign('widgetId', $widgetId);
 $template->assign('autoRefresh', $autoRefresh);
 $template->assign('data', $data);
-$template->display('table_top10cpu.ihtml');
+$template->display('index.ihtml');

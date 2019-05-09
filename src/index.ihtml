@@ -25,8 +25,8 @@
         <div id="chart">
         </div>
         {if $data != ""} 
-	        <script type="text/javascript" src="resources/apexcharts/dist/apexcharts.js" ></script>
-	        <script type="text/javascript" src="src/apexcharts_test.js"></script>
+	        <script type="text/javascript" src="resources/apexcharts.min.js" ></script>
+	        <script type="text/javascript" src="src/chart.js"></script>
 	        <script>
 	            load_graph_apex({$adata}, {$apreferences}, window.innerWidth);
 	        </script>
