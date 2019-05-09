@@ -89,12 +89,12 @@ if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) |
 	$template->assign('error', "<center><div class='error' style='text-align:center;width:350px;'>you must set your metric</div></center>");
 } else {
 
-$query = "SELECT SQL_CALC_FOUND_ROWS i.host_name, 
-	i.service_description, 
-	i.service_id, 
-	i.host_id, 
-	m.current_value AS current_value, 
-	s.state AS status, 
+$query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
+	i.service_description,
+	i.service_id,
+	i.host_id,
+	m.current_value AS current_value,
+	s.state AS status,
 	m.unit_name AS unit,
 	m.warn AS warning,
 	m.crit AS critical ";
@@ -127,12 +127,12 @@ if (isset($preferences['host_group']) && $preferences['host_group']) {
 	}
 	$hostgroupHgIdCondition = "hg.hostgroup_id IN (" . $queryHG . ") "
 	."AND i.host_id = hg.host_id";
-	
+
 	$query = CentreonUtils::conditionBuilder($query, $hostgroupHgIdCondition);
 
 }
 if ($centreon->user->admin == 0) {
-$query .="AND i.host_id = acl.host_id "
+    $query .="AND i.host_id = acl.host_id "
         ."AND i.service_id = acl.service_id "
         ."AND acl.group_id IN (" .($grouplistStr != "" ? $grouplistStr : 0). ")";
 }
@@ -155,6 +155,5 @@ while ($row = $res->fetch()) {
 }
 $template->assign('preferences', $preferences);
 $template->assign('widgetId', $widgetId);
-$template->assign('autoRefresh', $autoRefresh);
 $template->assign('data', $data);
 $template->display('index.ihtml');

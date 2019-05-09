@@ -8,7 +8,7 @@
 	        .ListTable {font-size:11px;border-color: #BFD0E2;}
         </style>
 	    <style>
-	        @import url('src/top10_cpu.css');
+	        @import url('src/chart.css');
 	        @import url('../../Themes/Centreon-2/style.css');
 	    </style>
 	{/literal}
@@ -24,7 +24,7 @@
         {assign var='apreferences' value=$preferences|@json_encode}
         <div id="chart">
         </div>
-        {if $data != ""} 
+        {if $data != ""}
 	        <script type="text/javascript" src="resources/apexcharts.min.js" ></script>
 	        <script type="text/javascript" src="src/chart.js"></script>
 	        <script>
