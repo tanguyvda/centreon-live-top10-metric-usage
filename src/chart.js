@@ -9,8 +9,9 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	var standardUnit = widgetData[0].unit;
 	var height = preferences.height - 50;
 	var width = windowWidth - 30;
-
-
+	var fonts = 'Open Sans, Arial, Tahoma, Helvetica, Sans-Serif';
+	var chartSeries = new Array();
+	var dataSerie = new Array();
 	/*
 	SERIE OPTIONS
 	*/
@@ -18,7 +19,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	//building serie data
 	for (i in widgetData) {
 
-		//selecting color
+		//selecting color depending on the service status if the option is set
 		if (preferences.enable_status_color == "1") {
 			if (widgetData[i].status == "2") {
 				barColor = "#ed1c24";
@@ -31,15 +32,19 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			barColor = "#2E93fA";
 		};
 
-		serieData.push({'name':widgetData[i].host_name, 'y':widgetData[i].current_value, 'x':widgetData[i].host_name, 'fillColor': barColor});
+		//set serie data
+		serieData[i] = {'name':widgetData[i].host_name, 'data':[{'y':widgetData[i].current_value, 'x':widgetData[i].host_name, 'fillColor': barColor}]} ;
+		//build axis labels with converted unit if needed
 		if (widgetData[0].unit == "B") {
+			units = [ 'B', 'KB', 'MB', 'TB'];
 			var calculus = Math.floor(Math.log(widgetData[i].current_value) / Math.log(1024));
 	 	} else if (widgetData[0].unit == "b/s") {
-	 		var calculus = Math.floor(Math.log(widgetData[i].current_value / 8) / Math.log(1024));
+			widgetData[i].current_value = widgetData[i].current_value / 8;
+			units = [ 'B/s', 'KB/s', 'MB/s', 'TB/s'];
+	 		var calculus = Math.floor(Math.log(widgetData[i].current_value) / Math.log(1024));
 	 	}
 
 		if (calculus != ""  && typeof(calculus) != "undefined") {
-			units = [ 'B', 'KB', 'MB', 'TB'];
 			var convertedValue = (widgetData[i].current_value / Math.pow(1024, calculus)).toFixed(2) * 1;
 			var convertedUnit = units[calculus];
 			categories.push(convertedValue + " " + convertedUnit);
@@ -47,16 +52,15 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			categories.push(widgetData[i].current_value);
 		}
 
-
+		//if one of the metric doesn't have the same threshold than the others, then we disable annotations
 		if (widgetData[i].warning != standardWarningThreshold) {
 			var enableWarningThreshold = "0";
 		}
-
 		if (widgetData[i].critical != standardCriticalThreshold) {
 			var enableCriticalThreshold = "0";
 		}
 	}
-
+console.log(serieData);
 	/*
 	CHART OPTIONS
 	*/
@@ -114,15 +118,6 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		var chartSubtitle = undefined;
 	} else {
 		var chartSubtitle = preferences.chart_subtitle;
-	}
-
-	/*
-	LEGEND OPTIONS
-	*/
-	if (preferences.enable_legend == "0") {
-		var enableLegend = false;
-	} else {
-		var enableLegend = true;
 	}
 
 	/*
@@ -192,11 +187,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	*/
 
 	//xaxis title
-	if (standardUnit != "") {
-		var xaxisTitle = preferences.service_description + " (" + standardUnit + ")";
-	} else {
-		var xaxisTitle = preferences.service_description;
-	}
+	var xaxisTitle = preferences.service_description;
 
 
 	/*
@@ -211,6 +202,9 @@ function loadGraph(widgetData, preferences, windowWidth) {
 				tools: {
 					download: true,
 				},
+			},
+			sparkline: {
+				enabled: false,
 			},
 			animations: {
 				enabled: enableAnimations,
@@ -228,6 +222,8 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		plotOptions: {
 	    	bar: {
             	horizontal: true,
+				barHeight: '100%',
+				distributed: true,
 				dataLabels: {
 					position: datalabelsPosition,
 				}
@@ -239,7 +235,16 @@ function loadGraph(widgetData, preferences, windowWidth) {
                     return opt.w.globals.seriesX[0][opt.dataPointIndex];
                 },
 			textAnchor: datalabelsTextAnchor,
+			style: {
+				fontFamily: fonts,
+			},
+			dropShadow: {
+				enabled: true,
+			}
         },
+		legend: {
+			show: false,
+		},
 		title: {
 			text: chartTitle,
 			align: titlePosition,
@@ -248,21 +253,50 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			text: chartSubtitle,
 			align: subtitlePosition,
 		},
-		legend: {
-			show: enableLegend,
-		},
 		tooltip: {
 			enabled: enableTooltip,
+			followCursor: true,
+			onDataSetHover: {
+				highLightDataSeries: true,
+			},
+			y: {
+				formatter: function(value, {series, seriesIndex, dataPointIndex, w}) {
+					console.log(value);
+					return w.globals.seriesX[0][series[0]];
+				}
+			}
 		},
-        series: [{
-			data: serieData,
-		}],
+        series: serieData,
 		yaxis: {
 		},
 		xaxis: {
 			categories: categories,
 			labels: {
-				show: true,
+				show: false,
+			},
+			title: {
+				text: xaxisTitle,
+				style: {
+					fontSize: '20px',
+					fontFamily: fonts,
+					cssClass: 'xAxisCSS',
+				},
+			},
+		},
+		stroke: {
+			width: 3,
+			colors: ['#fff'],
+		},
+		grid: {
+			yaxis: {
+				lines: {
+					show: false,
+				},
+			},
+			xaxis: {
+				lines: {
+					show: false,
+				},
 			},
 		},
 	}

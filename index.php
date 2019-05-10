@@ -149,11 +149,6 @@ if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) |
     $res->execute();
     while ($row = $res->fetch()) {
         $row['numLin'] = $numLine;
-        // if ($row['unit'] == "B" || $row['unit'] == "b/s" && $row['current_value'] > 0 ) {
-        //     $result = formatBytes($row['current_value'], $row['unit'], 4);
-        //     $row['converted_value'] = $result[0]['value'];
-        //     $row['converted_unit'] = $result[0]['unit'];
-        // }
         $data[] = $row;
         $numLine++;
     }
@@ -163,20 +158,3 @@ $template->assign('preferences', $preferences);
 $template->assign('widgetId', $widgetId);
 $template->assign('data', $data);
 $template->display('index.ihtml');
-
-// convert BYTES  or bits/second to the appropriate format
-function formatBytes($bytes, $unit, $precision) {
-    if ($unit == "b/s") {
-        $bytes = round($bytes / 8);
-        $units = array('B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s');
-    } else {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
-    }
-    $base = log($bytes, 1024);
-    $convertedData[] = [
-        'value' => round(pow(1024, $base - floor($base)), $precision),
-        'unit' => $units[floor($base)],
-    ];
-
-    return $convertedData;
-}
