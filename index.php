@@ -88,72 +88,95 @@ if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) |
 } elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
 	$template->assign('error', "<center><div class='error' style='text-align:center;width:350px;'>you must set your metric</div></center>");
 } else {
+    $query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
+    	i.service_description,
+    	i.service_id,
+    	i.host_id,
+    	m.current_value AS current_value,
+    	s.state AS status,
+    	m.unit_name AS unit,
+    	m.warn AS warning,
+    	m.crit AS critical ";
 
-$query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
-	i.service_description,
-	i.service_id,
-	i.host_id,
-	m.current_value AS current_value,
-	s.state AS status,
-	m.unit_name AS unit,
-	m.warn AS warning,
-	m.crit AS critical ";
+    $query .= " FROM metrics m,
+    	hosts h"
+            .($preferences['host_group'] ? ", hosts_hostgroups hg " : "")
+            .($centreon->user->admin == 0 ? ", centreon_acl acl " : "")
+            ." , index_data i "
+            ."LEFT JOIN services s ON s.service_id  = i.service_id AND s.enabled = 1";
 
-$query .= " FROM metrics m,
-	hosts h"
-        .($preferences['host_group'] ? ", hosts_hostgroups hg " : "")
-        .($centreon->user->admin == 0 ? ", centreon_acl acl " : "")
-        ." , index_data i "
-        ."LEFT JOIN services s ON s.service_id  = i.service_id AND s.enabled = 1";
+    $query .= " WHERE i.service_description LIKE '%".$preferences['service_description']."%' "
+            ."AND i.id = m.index_id "
+            ."AND m.metric_name LIKE '%".$preferences['metric_name']."%' "
+            ."AND i.host_id = h.host_id ";
 
-$query .= " WHERE i.service_description LIKE '%".$preferences['service_description']."%' "
-        ."AND i.id = m.index_id "
-        ."AND m.metric_name LIKE '%".$preferences['metric_name']."%' "
-        ."AND i.host_id = h.host_id ";
+    if (isset($preferences['host_group']) && $preferences['host_group']) {
+    	$results = explode(',', $preferences['host_group']);
+    	$queryHG = '';
+    	foreach ($results as $result) {
+    		if ($queryHG != '') {
+    			$queryHG .=', ';
+    		}
+    	$queryHG .= ":id_" . $result;
+    	$mainQueryParameters[] = [
+    		'parameter' => ':id_' . $result,
+    		'value' => (int)$result,
+    		'type' => PDO::PARAM_INT
+    	];
+    	}
+    	$hostgroupHgIdCondition = "hg.hostgroup_id IN (" . $queryHG . ") "
+    	."AND i.host_id = hg.host_id";
 
-if (isset($preferences['host_group']) && $preferences['host_group']) {
-	$results = explode(',', $preferences['host_group']);
-	$queryHG = '';
-	foreach ($results as $result) {
-		if ($queryHG != '') {
-			$queryHG .=', ';
-		}
-	$queryHG .= ":id_" . $result;
-	$mainQueryParameters[] = [
-		'parameter' => ':id_' . $result,
-		'value' => (int)$result,
-		'type' => PDO::PARAM_INT
-	];
-	}
-	$hostgroupHgIdCondition = "hg.hostgroup_id IN (" . $queryHG . ") "
-	."AND i.host_id = hg.host_id";
+    	$query = CentreonUtils::conditionBuilder($query, $hostgroupHgIdCondition);
 
-	$query = CentreonUtils::conditionBuilder($query, $hostgroupHgIdCondition);
+    }
+    if ($centreon->user->admin == 0) {
+        $query .="AND i.host_id = acl.host_id "
+            ."AND i.service_id = acl.service_id "
+            ."AND acl.group_id IN (" .($grouplistStr != "" ? $grouplistStr : 0). ")";
+    }
+    $query .="AND s.enabled = 1 "
+            ."AND h.enabled = 1 "
+            ."GROUP BY i.host_id "
+            ."ORDER BY current_value " . $preferences['order'] . " "
+            ."LIMIT ".$preferences['nb_lin'].";";
+    $numLine = 1;
+    $res = $db->prepare($query);
+    foreach ($mainQueryParameters as $parameter) {
+        $res->bindValue($parameter['parameter'], $parameter['value'], $parameter['type']);
+    }
 
+    $res->execute();
+    while ($row = $res->fetch()) {
+        $row['numLin'] = $numLine;
+        // if ($row['unit'] == "B" || $row['unit'] == "b/s" && $row['current_value'] > 0 ) {
+        //     $result = formatBytes($row['current_value'], $row['unit'], 4);
+        //     $row['converted_value'] = $result[0]['value'];
+        //     $row['converted_unit'] = $result[0]['unit'];
+        // }
+        $data[] = $row;
+        $numLine++;
+    }
 }
-if ($centreon->user->admin == 0) {
-    $query .="AND i.host_id = acl.host_id "
-        ."AND i.service_id = acl.service_id "
-        ."AND acl.group_id IN (" .($grouplistStr != "" ? $grouplistStr : 0). ")";
-}
-$query .="AND s.enabled = 1 "
-        ."AND h.enabled = 1 "
-        ."GROUP BY i.host_id "
-        ."ORDER BY current_value " . $preferences['order'] . " "
-        ."LIMIT ".$preferences['nb_lin'].";";
-$numLine = 1;
-$res = $db->prepare($query);
-foreach ($mainQueryParameters as $parameter) {
-    $res->bindValue($parameter['parameter'], $parameter['value'], $parameter['type']);
-}
-$res->execute();
-while ($row = $res->fetch()) {
-  $row['numLin'] = $numLine;
-  $data[] = $row;
-  $numLine++;
-}
-}
+
 $template->assign('preferences', $preferences);
 $template->assign('widgetId', $widgetId);
 $template->assign('data', $data);
 $template->display('index.ihtml');
+
+// convert BYTES  or bits/second to the appropriate format
+function formatBytes($bytes, $unit, $precision) {
+    if ($unit == "b/s") {
+        $bytes = round($bytes / 8);
+        $units = array('B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s');
+    } else {
+        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+    }
+    $base = log($bytes, 1024);
+    $convertedData[] = [
+        'value' => round(pow(1024, $base - floor($base)), $precision),
+        'unit' => $units[floor($base)],
+    ];
+
+    return $convertedData;
+}

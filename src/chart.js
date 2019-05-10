@@ -1,6 +1,7 @@
 function loadGraph(widgetData, preferences, windowWidth) {
 
 	var serieData = new Array();
+	var categories = new Array();
 	var hostName = new Array();
 	var graphData = new Array();
 	var standardWarningThreshold = widgetData[0].warning;
@@ -8,6 +9,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	var standardUnit = widgetData[0].unit;
 	var height = preferences.height - 50;
 	var width = windowWidth - 30;
+
 
 	/*
 	SERIE OPTIONS
@@ -30,7 +32,21 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		};
 
 		serieData.push({'name':widgetData[i].host_name, 'y':widgetData[i].current_value, 'x':widgetData[i].host_name, 'fillColor': barColor});
-		hostName.push(widgetData[i].host_name);
+		if (widgetData[0].unit == "B") {
+			var calculus = Math.floor(Math.log(widgetData[i].current_value) / Math.log(1024));
+	 	} else if (widgetData[0].unit == "b/s") {
+	 		var calculus = Math.floor(Math.log(widgetData[i].current_value / 8) / Math.log(1024));
+	 	}
+
+		if (calculus != ""  && typeof(calculus) != "undefined") {
+			units = [ 'B', 'KB', 'MB', 'TB'];
+			var convertedValue = (widgetData[i].current_value / Math.pow(1024, calculus)).toFixed(2) * 1;
+			var convertedUnit = units[calculus];
+			categories.push(convertedValue + " " + convertedUnit);
+		} else {
+			categories.push(widgetData[i].current_value);
+		}
+
 
 		if (widgetData[i].warning != standardWarningThreshold) {
 			var enableWarningThreshold = "0";
@@ -112,16 +128,27 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	/*
 	DATALABELS OPTIONS
 	*/
-	if (preferences.display_metric_value == "0") {
-		var displayMetricValue = false;
+
+	//enable datalabels
+	if (preferences.display_host_name == "0") {
+		var displayHostName = false;
 	} else {
-		var displayMetricValue = true;
+		var displayHostName = true;
 	}
 
+	//set datalabels position
 	if (preferences.datalabels_pos == "") {
-        var datalabelsPosition = "center";
+        var datalabelsPosition = "bottom";
+		var datalabelsTextAnchor = "start";
 	} else {
         var datalabelsPosition = preferences.datalabels_pos;
+		if (preferences.datalabels_pos == "bottom") {
+			var datalabelsTextAnchor = "start";
+		} else if (preferences.datalabels_pos == "center") {
+			var datalabelsTextAnchor = "middle";
+		} else if (preferences.datalabels_pos == "top") {
+			var datalabelsTextAnchor = "end";
+		}
 	}
 
 	/*
@@ -207,7 +234,11 @@ function loadGraph(widgetData, preferences, windowWidth) {
             }
 	    },
         dataLabels: {
-            enabled: displayMetricValue,
+            enabled: displayHostName,
+			formatter: function(val, opt) {
+                    return opt.w.globals.seriesX[0][opt.dataPointIndex];
+                },
+			textAnchor: datalabelsTextAnchor,
         },
 		title: {
 			text: chartTitle,
@@ -223,17 +254,15 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		tooltip: {
 			enabled: enableTooltip,
 		},
-	        series: [{
-			data:serieData,
+        series: [{
+			data: serieData,
 		}],
 		yaxis: {
-			title: {
-				text: 'Hosts',
-			}
 		},
 		xaxis: {
-			title: {
-				text: xaxisTitle,
+			categories: categories,
+			labels: {
+				show: true,
 			},
 		},
 	}
