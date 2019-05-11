@@ -264,7 +264,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			enabled: enableTooltip,
 			followCursor: true,
 			style: {
-				fontFamily: fonts,
+				fontFamily: jost,
 			},
 			onDataSetHover: {
 				highLightDataSeries: true,
