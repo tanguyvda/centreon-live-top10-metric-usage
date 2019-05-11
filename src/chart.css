@@ -1,7 +1,41 @@
+@font-face {
+  font-family: LeagueMono;
+  src: url(../resources/fonts/LeagueMono-BoldNormal.otf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: jost;
+  src: url(../resources/fonts/Jost-100-Hairline.otf);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: jost;
+  src: url(../resources/fonts/Jost-400-Book.otf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: jost;
+  src: url(../resources/fonts/Jost-200-Thin.otf);
+  font-weight: lighter;
+}
+
+
 #chart {
 
 }
 
+.apexcharts-datalabel {
+    font-weight: bold;
+    font-size: 120%;
+    text-rendering: geometricPrecision;
+}
 .xAxisCSS {
     font-weight: bold;
+}
+
+.yAxisCSS {
+    font-weight: normal;
 }

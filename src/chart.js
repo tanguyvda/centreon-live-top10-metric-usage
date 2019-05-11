@@ -9,9 +9,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	var standardUnit = widgetData[0].unit;
 	var height = preferences.height - 50;
 	var width = windowWidth - 30;
-	var fonts = 'Open Sans, Arial, Tahoma, Helvetica, Sans-Serif';
-	var chartSeries = new Array();
-	var dataSerie = new Array();
+
 	/*
 	SERIE OPTIONS
 	*/
@@ -33,7 +31,15 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		};
 
 		//set serie data
-		serieData[i] = {'name':widgetData[i].host_name, 'data':[{'y':widgetData[i].current_value, 'x':widgetData[i].host_name, 'fillColor': barColor}]} ;
+		serieData[i] = {
+			'name': widgetData[i].host_name,
+			'data': [{
+				'y': widgetData[i].current_value,
+				'x': widgetData[i].host_name,
+				'fillColor': barColor,
+			}]
+		};
+
 		//build axis labels with converted unit if needed
 		if (widgetData[0].unit == "B") {
 			units = [ 'B', 'KB', 'MB', 'TB'];
@@ -60,7 +66,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			var enableCriticalThreshold = "0";
 		}
 	}
-console.log(serieData);
+
 	/*
 	CHART OPTIONS
 	*/
@@ -232,11 +238,12 @@ console.log(serieData);
         dataLabels: {
             enabled: displayHostName,
 			formatter: function(val, opt) {
-                    return opt.w.globals.seriesNames[opt.seriesIndex];
-                },
+                return opt.w.globals.seriesNames[opt.seriesIndex];
+            },
 			textAnchor: datalabelsTextAnchor,
 			style: {
-				fontFamily: fonts,
+				fontFamily: "LeagueMono",
+				fontWeight: "bold",
 			},
 			dropShadow: {
 				enabled: true,
@@ -256,18 +263,43 @@ console.log(serieData);
 		tooltip: {
 			enabled: enableTooltip,
 			followCursor: true,
+			style: {
+				fontFamily: fonts,
+			},
 			onDataSetHover: {
 				highLightDataSeries: true,
 			},
 			y: {
 				formatter: function(value, {series, seriesIndex, dataPointIndex, w}) {
-					console.log(value);
-					return w.globals.seriesX[0][series[0]];
-				}
-			}
+					if (widgetData[0].unit != "") {
+						return series[seriesIndex] + widgetData[0].unit;
+					} else {
+						return series[seriesIndex];
+					}
+				},
+				title: {
+					formatter: function(w) {
+						return "";
+					},
+				},
+			},
+			x: {
+				formatter: function(value, {series, seriesIndex, dataPointIndex, w}) {
+					return w.globals.seriesNames[seriesIndex];
+				},
+			},
+			marker: {
+				show: false,
+			},
 		},
         series: serieData,
 		yaxis: {
+			labels: {
+				style: {
+					cssClass: 'yAxisCSS',
+					fontFamily: 'jost',
+				},
+			},
 		},
 		xaxis: {
 			categories: categories,
@@ -278,7 +310,7 @@ console.log(serieData);
 				text: xaxisTitle,
 				style: {
 					fontSize: '20px',
-					fontFamily: fonts,
+					fontFamily: 'jost',
 					cssClass: 'xAxisCSS',
 				},
 			},
