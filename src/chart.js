@@ -232,7 +232,7 @@ console.log(serieData);
         dataLabels: {
             enabled: displayHostName,
 			formatter: function(val, opt) {
-                    return opt.w.globals.seriesX[0][opt.dataPointIndex];
+                    return opt.w.globals.seriesNames[opt.seriesIndex];
                 },
 			textAnchor: datalabelsTextAnchor,
 			style: {
