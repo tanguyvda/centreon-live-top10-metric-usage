@@ -14,4 +14,27 @@ this widget is here to provide you information regarding your most consuming ser
 ![extensions](doc/images/administration.jpg)
 
 ## Configuration
+- head over the home menu and add your newly installed widget. 
+![add_widget](doc/images/new_widgets.jpg)
 
+- set up the mandatory parameters
+![configure_widget](doc/images/widget_conf.jpg)
+
+### Result
+![widget_preview](doc/images/widget_descr.jpg)
+
+## Customization
+This widget comes with a lot of options and this chapter is here to help you go through
+
+### Chart Title
+allows you to write your own title for the chart
+![title](doc/images/title.jpg)
+![title](doc/images/title2.jpg)
+
+### Chart Subtitle
+allows you to write your own subtitle for the chart
+![title](doc/images/subtitle.jpg)
+![title](doc/images/subtitle2.jpg)
+
+### Titles position
+allows you to change the titles position (left, center or right)
