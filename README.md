@@ -11,7 +11,7 @@ this widget is here to provide you information regarding your most consuming ser
 - clone this repository
 `git clone https://github.com/tanguyvda/centreon-live-top10-metric-usage.git`
 - Then, in your Centreon web interface, go to Administration -> Extensions -> widgets and install your new widget
-
+![extensions](doc/images/administration.jpg)
 
 ## Configuration
 
