@@ -38,3 +38,17 @@ allows you to write your own subtitle for the chart
 
 ### Titles position
 allows you to change the titles position (left, center or right)
+![title](doc/images/title_pos.jpg)
+![title](doc/images/title_pos2.jpg)
+
+### Animations
+you can disable the chart animation if you wish and change the animation effect
+![title](doc/images/animation.jpg)
+
+### Toolbar
+you can disable the toolbar that allows you to save the chart in a PNG or SVG format
+![title](doc/images/toolbar.jpg)
+![title](doc/images/toolbar2.jpg)
+
+### 
+
