@@ -242,8 +242,8 @@ function loadGraph(widgetData, preferences, windowWidth) {
             },
 			textAnchor: datalabelsTextAnchor,
 			style: {
-				fontFamily: "LeagueMono",
-				fontWeight: "bold",
+				fontFamily: "jost",
+				fontWeight: "100",
 			},
 			dropShadow: {
 				enabled: true,
@@ -264,7 +264,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 			enabled: enableTooltip,
 			followCursor: true,
 			style: {
-				fontFamily: jost,
+				fontFamily: "jost",
 			},
 			onDataSetHover: {
 				highLightDataSeries: true,
