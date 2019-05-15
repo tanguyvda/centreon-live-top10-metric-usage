@@ -41,7 +41,7 @@
 			<div class="errorWrapper">
 				<img src="./resources/images/Centreon_Logo_V_RVB.svg" alt="centreon logo" class="centreonLogo">
 				<span class="fontErrorIcon motionSpan"><i class="fa fa-warning"></i></span>
-				<span class="errorMessage">No data found, please check your widgets parameters</span>
+				<span class="errorMessage">No data found, please check your widget's parameters</span>
 			</div>
 	    {/if}
     {/if}

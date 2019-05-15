@@ -59,10 +59,10 @@ function loadGraph(widgetData, preferences, windowWidth) {
 		}
 
 		//if one of the metric doesn't have the same threshold than the others, then we disable annotations
-		if (widgetData[i].warning != standardWarningThreshold) {
+		if (widgetData[i].warning != standardWarningThreshold || widgetData[i].warning == null || widgetData[i].warning == undefined) {
 			var enableWarningThreshold = "0";
 		}
-		if (widgetData[i].critical != standardCriticalThreshold) {
+		if (widgetData[i].critical != standardCriticalThreshold || widgetData[i].critical == null || widgetData[i].critical == undefined) {
 			var enableCriticalThreshold = "0";
 		}
 	}
