@@ -10,7 +10,6 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 	var height = preferences.height - 50;
 	var width = windowWidth - 30;
 	var chartHeight = rowCount * 40;
-	console.log(widgetData);
 
 	/*
 	SERIE OPTIONS
@@ -57,7 +56,11 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 			var convertedUnit = units[calculus];
 			categories.push(convertedValue + " " + convertedUnit);
 		} else {
-			categories.push(widgetData[i].current_value);
+			if (widgetData[i].unit != "" && typeof(widgetData[i].unit) != "undefined") {
+				categories.push(widgetData[i].current_value + " " + widgetData[i].unit);
+			} else {
+				categories.push(widgetData[i].current_value);
+			}
 		}
 
 		//if one of the metric doesn't have the same threshold than the others, then we disable annotations
