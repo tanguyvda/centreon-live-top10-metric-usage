@@ -1,4 +1,4 @@
-function loadGraph(widgetData, preferences, windowWidth) {
+function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 
 	var serieData = new Array();
 	var categories = new Array();
@@ -9,6 +9,8 @@ function loadGraph(widgetData, preferences, windowWidth) {
 	var standardUnit = widgetData[0].unit;
 	var height = preferences.height - 50;
 	var width = windowWidth - 30;
+	var chartHeight = rowCount * 40;
+	console.log(widgetData);
 
 	/*
 	SERIE OPTIONS
@@ -223,7 +225,7 @@ function loadGraph(widgetData, preferences, windowWidth) {
 				},
 			},
 			width: width,
-			height: height,
+			height: chartHeight,
 		},
 		plotOptions: {
 	    	bar: {

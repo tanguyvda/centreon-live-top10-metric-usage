@@ -89,9 +89,7 @@ $template = new Smarty();
 $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
 
 // check mandatory options
-if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) || $preferences['host_group'] == '' ) {
-	$template->assign('warning', "you must set your hostgroup");
-} elseif ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
+if ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
 	$template->assign('warning', "you must set your service");
 } elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
 	$template->assign('warning', "you must set your metric");
@@ -159,7 +157,6 @@ if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) |
             ."GROUP BY i.host_id "
             ."ORDER BY current_value " . $preferences['order'] . " "
             ."LIMIT ".$preferences['nb_lin'].";";
-    $numLine = 1;
 
     // sending sql query
     $res = $db->prepare($query);
@@ -174,10 +171,9 @@ if ( !isset($preferences['host_group']) || is_null($preferences['host_group']) |
     }
 
     while ($row = $res->fetch()) {
-        $row['numLin'] = $numLine;
         $data[] = $row;
-        $numLine++;
     }
+    $template->assign('rowCount', $res->rowCount());
 }
 
 
