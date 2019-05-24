@@ -198,7 +198,11 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 	*/
 
 	//xaxis title
-	var xaxisTitle = preferences.service_description;
+	if (widgetData[0].unit != "") {
+		var xaxisTitle = preferences.service_description + " (" + widgetData[0].unit + ")";
+	} else {
+		var xaxisTitle = preferences.service_description;
+	}
 
 
 	/*
@@ -247,11 +251,12 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
             },
 			textAnchor: datalabelsTextAnchor,
 			style: {
-				fontFamily: "jost",
-				fontWeight: "100",
+				fontFamily: "sourcesans",
+				fontSize: '20px',
+				colors: [ '#232f39'],
 			},
 			dropShadow: {
-				enabled: true,
+				enabled: false,
 			}
         },
 		legend: {
@@ -269,7 +274,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 			enabled: enableTooltip,
 			followCursor: true,
 			style: {
-				fontFamily: "jost",
+				fontFamily: "sourcesans",
 			},
 			onDataSetHover: {
 				highLightDataSeries: true,
@@ -302,7 +307,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 			labels: {
 				style: {
 					cssClass: 'yAxisCSS',
-					fontFamily: 'jost',
+					fontFamily: 'sourcesans',
 				},
 			},
 		},
@@ -315,7 +320,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 				text: xaxisTitle,
 				style: {
 					fontSize: '20px',
-					fontFamily: 'jost',
+					fontFamily: 'sourcesans',
 					cssClass: 'xAxisCSS',
 				},
 			},
