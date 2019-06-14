@@ -91,9 +91,9 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 
 	//toolbar
 	if (preferences.enable_toolbar == "0") {
-	        var enableToolbar = false;
+		var enableToolbar = false;
 	} else {
-	        var enableToolbar = true;
+		var enableToolbar = true;
 	}
 
 	/*
@@ -112,9 +112,9 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 	}
 
 	if (preferences.chart_title == "") {
-	        var chartTitle = undefined;
+		var chartTitle = undefined;
 	} else {
-	        var chartTitle = preferences.chart_title;
+		var chartTitle = preferences.chart_title;
 	}
 
 
@@ -144,10 +144,10 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 
 	//set datalabels position
 	if (preferences.datalabels_pos == "") {
-        var datalabelsPosition = "bottom";
+		var datalabelsPosition = "bottom";
 		var datalabelsTextAnchor = "start";
 	} else {
-        var datalabelsPosition = preferences.datalabels_pos;
+		var datalabelsPosition = preferences.datalabels_pos;
 		if (preferences.datalabels_pos == "bottom") {
 			var datalabelsTextAnchor = "start";
 		} else if (preferences.datalabels_pos == "center") {
@@ -211,7 +211,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 	var options = {
 		chart: {
 			height: preferences.height,
-            type: 'bar',
+			type: 'bar',
 			toolbar: {
 				show: enableToolbar,
 				tools: {
@@ -235,20 +235,20 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 			height: chartHeight,
 		},
 		plotOptions: {
-	    	bar: {
-            	horizontal: true,
+			bar: {
+				horizontal: true,
 				barHeight: '100%',
 				distributed: true,
 				dataLabels: {
 					position: datalabelsPosition,
-				}
-            }
-	    },
-        dataLabels: {
-            enabled: displayHostName,
+				},
+      },
+		},
+		dataLabels: {
+			enabled: displayHostName,
 			formatter: function(val, opt) {
-                return opt.w.globals.seriesNames[opt.seriesIndex];
-            },
+				return opt.w.globals.seriesNames[opt.seriesIndex];
+			},
 			textAnchor: datalabelsTextAnchor,
 			style: {
 				fontFamily: "sourcesans",
@@ -257,8 +257,8 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 			},
 			dropShadow: {
 				enabled: false,
-			}
-        },
+			},
+		},
 		legend: {
 			show: false,
 		},
@@ -302,7 +302,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 				show: false,
 			},
 		},
-        series: serieData,
+    series: serieData,
 		yaxis: {
 			labels: {
 				style: {
@@ -352,43 +352,43 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 		if (widgetData.warning != "" && enableWarningThreshold != "0" ) {
 			annotationsXaxis.push({
    				x: standardWarningThreshold,
-                strokeDashArray: annotationsStyle,
-                borderColor: "#FEB019",
-                label: {
-                	borderColor: "#FEB019",
-                    style: {
-                        color: "#fff",
-                        background: "#FEB019",
-                    },
-                    orientation: "vertical",
-                    text: annotationsLabelWarning,
-                    position: annotationsPosition,
-				}
-			});
+          strokeDashArray: annotationsStyle,
+          borderColor: "#FEB019",
+          label: {
+          	borderColor: "#FEB019",
+              style: {
+								color: "#fff",
+								background: "#FEB019",
+              },
+							orientation: "vertical",
+              text: annotationsLabelWarning,
+              position: annotationsPosition,
+						}
+					});
 		}
 
 		if (widgetData.critical != "" && enableCriticalThreshold != "0") {
 			annotationsXaxis.push({
 				x: standardCriticalThreshold,
-                strokeDashArray: annotationsStyle,
-                borderColor: "#FF4560",
+				strokeDashArray: annotationsStyle,
+				borderColor: "#FF4560",
 				label: {
-	                borderColor: "#FF4560",
-	                style: {
-	                        color: "#fff",
-	                        background: "#FF4560",
-						},
+					borderColor: "#FF4560",
+					style: {
+						color: "#fff",
+						background: "#FF4560",
+					},
 					orientation: "vertical",
-	                text: annotationsLabelCritical,
-	                position: annotationsPosition,
+					text: annotationsLabelCritical,
+					position: annotationsPosition,
 				},
 			});
 		}
 
 		chart.updateOptions({
-		annotations: {
-			xaxis: annotationsXaxis,
-	        },
+			annotations: {
+				xaxis: annotationsXaxis,
+			},
 		}, enableAnimations, enableAnimations);
 	};
 }

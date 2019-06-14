@@ -93,8 +93,6 @@ if ( !isset($preferences['service_description']) || is_null($preferences['servic
 	$template->assign('warning', "you must set your service");
 } elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
 	$template->assign('warning', "you must set your metric");
-
-
 // retrieve data
 } else {
     $query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
@@ -148,8 +146,8 @@ if ( !isset($preferences['service_description']) || is_null($preferences['servic
     }
 
     // for the sake of performance, we limit the number of results
-    if ($preferences['nb_lin'] > 50) {
-        $preferences['nb_lin'] = 50;
+    if ($preferences['nb_lin'] > 15) {
+        $preferences['nb_lin'] = 15;
     }
 
     $query .="AND s.enabled = 1 "
