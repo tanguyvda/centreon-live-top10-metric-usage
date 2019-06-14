@@ -302,7 +302,7 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
 				show: false,
 			},
 		},
-    series: serieData,
+		series: serieData,
 		yaxis: {
 			labels: {
 				style: {
@@ -356,16 +356,16 @@ function loadGraph(widgetData, preferences, windowWidth, rowCount) {
           borderColor: "#FEB019",
           label: {
           	borderColor: "#FEB019",
-              style: {
-								color: "#fff",
-								background: "#FEB019",
-              },
-							orientation: "vertical",
-              text: annotationsLabelWarning,
-              position: annotationsPosition,
-						}
-					});
-		}
+						style: {
+							color: "#fff",
+							background: "#FEB019",
+						},
+						orientation: "vertical",
+						text: annotationsLabelWarning,
+						position: annotationsPosition,
+					}
+				});
+			}
 
 		if (widgetData.critical != "" && enableCriticalThreshold != "0") {
 			annotationsXaxis.push({
