@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.25</version>
+        <version>18.10.28</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -57,6 +57,6 @@
     		<option value="top" label="top"/>
     		<option value="bottom" label="bottom"/>
     	</preference>
-        <preference label="Refresh Interval (seconds)" name="refresh_interval" defaultValue="150" type="text"/>
+        <preference label="Auto Refresh" name="autoRefresh" defaultValue="30" type="text"/>
 	</preferences>
 </configs>

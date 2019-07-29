@@ -41,6 +41,7 @@ require_once $centreon_path . 'www/class/centreonDuration.class.php';
 require_once $centreon_path . 'www/class/centreonUtils.class.php';
 require_once $centreon_path . 'www/class/centreonACL.class.php';
 require_once $centreon_path . 'www/class/centreonHost.class.php';
+require_once './src/class/centreonLiveMetric.class.php';
 require_once $centreon_path . 'bootstrap.php';
 
 CentreonSession::start(1);
@@ -51,131 +52,33 @@ if (!isset($_SESSION['centreon']) || !isset($_REQUEST['widgetId'])) {
 
 $centreon = $_SESSION['centreon'];
 $widgetId = $_REQUEST['widgetId'];
-$grouplistStr = '';
-$data = array();
 
-// retrieve widget preferences
 try {
-    $db_centreon = $dependencyInjector['configuration_db'];
-    $db = $dependencyInjector['realtime_db'];
-
-    $widgetObj = new CentreonWidget($centreon, $db_centreon);
-    $preferences = $widgetObj->getWidgetPreferences($widgetId);
-    $autoRefresh = 0;
-    if (isset($preferences['refresh_interval'])) {
-        $autoRefresh = $preferences['refresh_interval'];
-    }
+    $data = new CentreonLiveMetric($dependencyInjector,$centreon,$widgetId);
 } catch (Exception $e) {
     echo $e->getMessage() . "<br/>";
-    exit;
 }
 
-//avoid XSS vulnerabilities
-foreach ($preferences as $key => $value) {
-    $value = centreonUtils::escapeAll($value);
-    $preferences[$key] = $value;
-};
-
-// get acl data
-if ($centreon->user->admin == 0) {
-  $access = new CentreonACL($centreon->user->get_id());
-  $grouplist = $access->getAccessGroups();
-  $grouplistStr = $access->getAccessGroupsString();
-}
-
-//configure smarty
-$path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
-$template = new Smarty();
-$template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
-
-// check mandatory options
-if ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
-	$template->assign('warning', "you must set your service");
-} elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
-	$template->assign('warning', "you must set your metric");
-// retrieve data
+if (isset($_REQUEST['refreshChart'])) {
+    header('Content-Type: application/json');
+    echo json_encode($data->getMetrics());
 } else {
-    $query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
-    	i.service_description,
-    	i.service_id,
-    	i.host_id,
-    	m.current_value AS current_value,
-    	s.state AS status,
-    	m.unit_name AS unit,
-    	m.warn AS warning,
-    	m.crit AS critical ";
-
-    $query .= " FROM metrics m,
-    	hosts h"
-            .($preferences['host_group'] ? ", hosts_hostgroups hg " : "")
-            .($centreon->user->admin == 0 ? ", centreon_acl acl " : "")
-            ." , index_data i "
-            ."LEFT JOIN services s ON s.service_id  = i.service_id AND s.enabled = 1";
-
-    $query .= " WHERE i.service_description LIKE '%".$preferences['service_description']."%' "
-            ."AND i.id = m.index_id "
-            ."AND m.metric_name LIKE '%".$preferences['metric_name']."%' "
-            ."AND i.host_id = h.host_id ";
-
-    if (isset($preferences['host_group']) && $preferences['host_group']) {
-    	$results = explode(',', $preferences['host_group']);
-    	$queryHG = '';
-    	foreach ($results as $result) {
-    		if ($queryHG != '') {
-    			$queryHG .=', ';
-    		}
-    	$queryHG .= ":id_" . $result;
-    	$mainQueryParameters[] = [
-    		'parameter' => ':id_' . $result,
-    		'value' => (int)$result,
-    		'type' => PDO::PARAM_INT
-    	];
-    	}
-    	$hostgroupHgIdCondition = "hg.hostgroup_id IN (" . $queryHG . ") "
-    	."AND i.host_id = hg.host_id";
-
-    	$query = CentreonUtils::conditionBuilder($query, $hostgroupHgIdCondition);
-
+    //configure smarty
+    $path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
+    $template = new Smarty();
+    $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
+    $preferences = $data->getPreferences();
+    $chartData = $data->getMetrics();
+    // check mandatory options
+    if ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
+    	$template->assign('warning', "you must set your service");
+    } elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
+    	$template->assign('warning', "you must set your metric");
+    // retrieve data
     }
 
-    // filter data depending on user's acl
-    if ($centreon->user->admin == 0) {
-        $query .="AND i.host_id = acl.host_id "
-            ."AND i.service_id = acl.service_id "
-            ."AND acl.group_id IN (" .($grouplistStr != "" ? $grouplistStr : 0). ")";
-    }
-
-    // for the sake of performance, we limit the number of results
-    if ($preferences['nb_lin'] > 15) {
-        $preferences['nb_lin'] = 15;
-    }
-
-    $query .="AND s.enabled = 1 "
-            ."AND h.enabled = 1 "
-            ."GROUP BY i.host_id "
-            ."ORDER BY current_value " . $preferences['order'] . " "
-            ."LIMIT ".$preferences['nb_lin'].";";
-
-    // sending sql query
-    $res = $db->prepare($query);
-    foreach ($mainQueryParameters as $parameter) {
-        $res->bindValue($parameter['parameter'], $parameter['value'], $parameter['type']);
-    }
-
-    try {
-        $res->execute();
-    } catch (\Exception $e) {
-        $template->assign('error', $e->getMessage());
-    }
-
-    while ($row = $res->fetch()) {
-        $data[] = $row;
-    }
-    $template->assign('rowCount', $res->rowCount());
+    $template->assign('preferences', $preferences);
+    $template->assign('widgetId', $widgetId);
+    $template->assign('chartData', $chartData);
+    $template->display('index.ihtml');
 }
-
-
-$template->assign('preferences', $preferences);
-$template->assign('widgetId', $widgetId);
-$template->assign('data', $data);
-$template->display('index.ihtml');

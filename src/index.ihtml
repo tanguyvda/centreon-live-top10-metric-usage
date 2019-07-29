@@ -24,15 +24,20 @@
 
 	<!-- handle data if no errors were found	 -->
     {else}
-        {assign var='adata' value=$data|@json_encode}
+        {assign var='adata' value=$chartData|@json_encode}
         {assign var='apreferences' value=$preferences|@json_encode}
-        {if $data != "" && $data != NULL}
+        {if $chartData != "" && $chartData != NULL}
 			<div id="chart">
-		        <script type="text/javascript" src="resources/js/apexcharts.min.js" ></script>
+				<script>
+					var widgetData = {$adata};
+					var preferences = {$apreferences};
+					var windowWidth = window.innerWidth;
+					const widgetId = {$widgetId};
+				</script>
+				<script type="text/javascript" src="resources/js/apexcharts.min.js" ></script>
+				<script type="text/javascript" src="src/sample_chart.js"></script>
+				<script type="text/javascript" src="class/centreonCharts.js"></script>
 		        <script type="text/javascript" src="src/chart.js"></script>
-		        <script>
-		            loadGraph({$adata}, {$apreferences}, window.innerWidth, {$rowCount});
-		        </script>
 			</div>
 
 		<!-- print error if no data has been found	 -->
@@ -43,13 +48,5 @@
 			</div>
 	    {/if}
     {/if}
-
-	<!-- refresh iframe -->
-	<script>
-		//for each result we grant 40px to the iframe size, we then add 15 px to make sure the chart is well displayed
-        parent.iResize(window.name, "{$rowCount}" * 40 + 15);
-        var refresh_interval = "{$preferences.refresh_interval}";
-    </script>
-    <script type="text/javascript" src="src/data_js.js"></script>
 </body>
 </html>
