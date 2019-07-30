@@ -1,39 +1,37 @@
-var serieData = new Array();
-var hostName = new Array();
-var graphData = new Array();
-var convertedData = new Array();
-var standardWarningThreshold = widgetData[0].warning;
-var standardCriticalThreshold = widgetData[0].critical;
-var standardUnit = widgetData[0].unit;
-var height = preferences.height - 50;
-var width = windowWidth - 30;
-var rowCount = 0;
-var chartHeight = widgetData.rowCount * 40;
-var autoRefresh = preferences.autoRefresh;
-var timeout;
+let serieData = new Array();
+let hostName = new Array();
+let graphData = new Array();
+let convertedData = new Array();
+let standardWarningThreshold = widgetData[0].warning;
+let standardCriticalThreshold = widgetData[0].critical;
+let standardUnit = widgetData[0].unit;
+let height = preferences.height - 50;
+let width = windowWidth - 30;
+let rowCount = '';
+let chartHeight = widgetData.rowCount * 40;
+let autoRefresh = preferences.autoRefresh;
+let timeout;
 
 /*
 PREFERENCES OPTIONS
 */
-var enableAnimations = false;
-var animationType = 'easeinout';
-var enableToolbar = false;
-var titlePosition = 'center';
-var titlePosition = 'center';
-var chartTitle = undefined;
-var subtitlePosition = 'center';
-var chartSubtitle = undefined;
-var displayHostName = false;
-var displayHostName = false;
-var enableTooltip = false;
-var annotationsPosition = 'bottom';
-var annotationsStyle = 5;
-var annotationsLabelWarning = 'warning';
-var annotationsLabelCritical = 'critical';
-var xaxisTitle = preferences.service_description;
-var categories;
-var annotationsXaxis = new Array();
-var enableThreshold = {
+let enableAnimations = false;
+let animationType = 'easeinout';
+let enableToolbar = false;
+let titlePosition = 'center';
+let chartTitle = undefined;
+let subtitlePosition = 'center';
+let chartSubtitle = undefined;
+let displayHostName = false;
+let enableTooltip = false;
+let annotationsPosition = 'bottom';
+let annotationsStyle = 5;
+let annotationsLabelWarning = 'warning';
+let annotationsLabelCritical = 'critical';
+let xaxisTitle = preferences.service_description;
+let categories;
+let annotationsXaxis = new Array();
+let enableThreshold = {
   critical: 0,
   warning: 0
 };
@@ -41,7 +39,7 @@ var enableThreshold = {
 /*
 CHART DESIGN OPTIONS
 */
-var chartDesign = {
+let chartDesign = {
   colors: {
     critical: '#ed1c24',
     warning: '#ff9913',
@@ -62,7 +60,7 @@ var chartDesign = {
     yAxis: 'yAxisCSS'
   }
 }
-var barColor = '';
+let barColor = '';
 
 function sleep() {
   return new Promise(resolve => setTimeout(resolve, autoRefresh * 1000));
@@ -293,6 +291,13 @@ function buildChartOption() {
   //annotations
   if (preferences.enable_annotations === '1') {
     buildChartAnnotations();
+  }
+
+  //on click event
+  options.chart.events.dataPointSelection = function(event, chartContext, config) {
+    window.open(window.location.origin = '/centreon/main.php?p=20401&mode=0&svc_id='
+    + widgetData[config.seriesIndex].host_name + ';'
+    + widgetData[config.seriesIndex].service_description);
   }
   console.log('options');
   console.log(options);

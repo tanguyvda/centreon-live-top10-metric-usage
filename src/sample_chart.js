@@ -15,6 +15,10 @@ var options = {
       dynamicAnimation: {
       },
     },
+    events: {
+      dataPointSelection: {
+      }
+    }
   },
   plotOptions: {
     bar: {
