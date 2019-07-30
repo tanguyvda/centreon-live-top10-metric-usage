@@ -8,7 +8,7 @@ let standardUnit = widgetData[0].unit;
 let height = preferences.height - 50;
 let width = windowWidth - 30;
 let rowCount = '';
-let chartHeight = widgetData.rowCount * 40;
+let chartHeight = widgetData.rowCount * 40 + 100;
 let autoRefresh = preferences.autoRefresh;
 let timeout;
 
@@ -45,14 +45,18 @@ let chartDesign = {
     warning: '#ff9913',
     ok: '#87bd23',
     unknown: '',
-    default: '#2E93fA'
+    default: '#2E93fA',
+    text: ['#aeaeae']
   },
   fontFamily: {
-    default: 'sourcesans'
+    default: 'Roboto Regular',
+    bold: 'Roboto Bold',
+    light: 'Roboto Light',
+    medium: 'Roboto Medium'
   },
   fontSize: {
     dataLabels: '10px',
-    xAxis: '10px',
+    xAxis: '20px',
     default: '10px'
   },
   css: {
@@ -77,7 +81,7 @@ function updateChartData(chart) {
     success: function(widgetData) {
       try {
         serieData = buildSerieData(widgetData);
-        parent.iResize(window.name, rowCount * 40 + 15);
+        parent.iResize(window.name, rowCount * 40 + 100);
         chart.updateSeries(serieData);
         chart.updateOptions({
           xaxis: {
@@ -263,6 +267,7 @@ function buildChartOption() {
   options.dataLabels.textAnchor = datalabelsTextAnchor;
   options.dataLabels.style.fontFamily = chartDesign.fontFamily.default;
   options.dataLabels.style.fontSize = chartDesign.fontSize.dataLabels;
+  options.dataLabels.style.colors = chartDesign.colors.text;
 
   //title options
   options.title.text = chartTitle;
@@ -294,7 +299,7 @@ function buildChartOption() {
   }
 
   //on click event
-  options.chart.events.dataPointSelection = function(event, chartContext, config) {
+  options.chart.events.dataPointSelection = function(config) {
     window.open(window.location.origin = '/centreon/main.php?p=20401&mode=0&svc_id='
     + widgetData[config.seriesIndex].host_name + ';'
     + widgetData[config.seriesIndex].service_description);

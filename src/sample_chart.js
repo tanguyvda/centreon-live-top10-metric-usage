@@ -31,9 +31,6 @@ var options = {
   },
   dataLabels: {
     style: {
-      fontFamily: "sourcesans",
-      fontSize: '20px',
-      colors: [ '#232f39'],
     },
     dropShadow: {
       enabled: false,
@@ -49,7 +46,6 @@ var options = {
   tooltip: {
     followCursor: true,
     style: {
-      fontFamily: "sourcesans",
     },
     onDataSetHover: {
       highLightDataSeries: true,
@@ -70,10 +66,13 @@ var options = {
   yaxis: {
     labels: {
       style: {
-        cssClass: 'yAxisCSS',
-        fontFamily: 'sourcesans',
       },
     },
+    axisTick: {
+      show: true,
+      borderType: 'solid',
+      height: 6,
+    }
   },
   xaxis: {
     labels: {
@@ -81,11 +80,13 @@ var options = {
     },
     title: {
       style: {
-        fontSize: '20px',
-        fontFamily: 'sourcesans',
-        cssClass: 'xAxisCSS',
       },
     },
+    axisTick: {
+      show: true,
+      borderType: 'solid',
+      height: 6,
+    }
   },
   stroke: {
   },
