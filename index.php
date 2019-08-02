@@ -59,26 +59,30 @@ try {
     echo $e->getMessage() . "<br/>";
 }
 
-if (isset($_REQUEST['refreshChart'])) {
-    header('Content-Type: application/json');
-    echo json_encode($data->getMetrics());
+// check mandatory options
+if (!isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '') {
+    $template->assign('warning', "you must set your service.");
+} elseif (!isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '') {
+    $template->assign('warning', "you must set your metric.");
 } else {
-    //configure smarty
-    $path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
-    $template = new Smarty();
-    $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
-    $preferences = $data->getPreferences();
-    $chartData = $data->getMetrics();
-    // check mandatory options
-    if ( !isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '' ) {
-    	$template->assign('warning', "you must set your service");
-    } elseif ( !isset($preferences['metric_name']) || is_null($preferences['metric_name']) || $preferences['metric_name'] == '' ) {
-    	$template->assign('warning', "you must set your metric");
-    // retrieve data
-    }
+    if (isset($_REQUEST['refreshChart'])) {
+        header('Content-Type: application/json');
+        echo json_encode($data->getMetrics());
+    } else {
+        //configure smarty
+        $path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
+        $template = new Smarty();
+        $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
+        $preferences = $data->getPreferences();
+        $chartData = $data->getMetrics();
 
-    $template->assign('preferences', $preferences);
-    $template->assign('widgetId', $widgetId);
-    $template->assign('chartData', $chartData);
-    $template->display('index.ihtml');
+        if ($chartData['rowCount'] == 0) {
+            $template->assign('warning', "no data found using service: " . $preferences['service_description'] . " and metric: " . $preferences['metric_name'] .".");
+        }
+
+        $template->assign('preferences', $preferences);
+        $template->assign('widgetId', $widgetId);
+        $template->assign('chartData', $chartData);
+        $template->display('index.ihtml');
+    }
 }

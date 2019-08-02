@@ -14,12 +14,12 @@
     {if $warning != ""}
 		<div class="errorWrapper">
 			<span class="fontWarningIcon motionSpan"><i class="fa fa-warning"></i></span>
-			<span class="warningMessage">{$error}</span>
+			<span class="warningMessage alertMessage">{$warning}</span>
 		</div>
 	{elseif $error != ""}
 		<div class="errorWrapper">
 			<span class="fontErrorIcon motionSpan"><i class="fa fa-warning"></i></span>
-			<span class="errorMessage">{$error}</span>
+			<span class="errorMessage alertMessage">{$error}</span>
 		</div>
 
 	<!-- handle data if no errors were found	 -->

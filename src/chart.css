@@ -33,6 +33,11 @@ body {
 #chart {
 }
 
+.alertMessage {
+    font-family: "Roboto Regular";
+    display: block;
+}
+
 /* .apexcharts-title-text {
     font-weight: bold;
     font-size: 20px;
@@ -79,13 +84,9 @@ body {
 }
 
 .warningMessage {
-    display: block;
-    font-family: sourcesans;
 }
 
 .errorMessage {
-    display: block;
-    font-family: sourcesans;
 }
 
 .fontWarningIcon {

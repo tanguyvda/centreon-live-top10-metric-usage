@@ -8,7 +8,7 @@ let standardUnit = widgetData[0].unit;
 let height = preferences.height - 50;
 let width = windowWidth - 30;
 let rowCount = '';
-let chartHeight = widgetData.rowCount * 40 + 100;
+let chartHeight = widgetData.rowCount * 30;
 let autoRefresh = preferences.autoRefresh;
 let timeout;
 
@@ -30,6 +30,7 @@ let annotationsLabelWarning = 'warning';
 let annotationsLabelCritical = 'critical';
 let xaxisTitle = preferences.service_description;
 let categories;
+let displayGrid = false
 let annotationsXaxis = new Array();
 let enableThreshold = {
   critical: 0,
@@ -41,11 +42,11 @@ CHART DESIGN OPTIONS
 */
 let chartDesign = {
   colors: {
-    critical: '#ed1c24',
-    warning: '#ff9913',
-    ok: '#87bd23',
-    unknown: '',
-    default: '#2E93fA',
+    critical: '#f4767b',
+    warning: '#ffc170',
+    ok: '#b7d77a',
+    unknown: '#dcdcdc',
+    default: '#65bcfd',
     text: ['#aeaeae']
   },
   fontFamily: {
@@ -81,7 +82,7 @@ function updateChartData(chart) {
     success: function(widgetData) {
       try {
         serieData = buildSerieData(widgetData);
-        parent.iResize(window.name, rowCount * 40 + 100);
+        parent.iResize(window.name, widgetData.rowCount * 30);
         chart.updateSeries(serieData);
         chart.updateOptions({
           xaxis: {
@@ -232,10 +233,8 @@ function buildChartOption() {
   ? annotationsLabelCritical
   : annotationsLabelCritical = '';
 
-  //xaxis title
-  xaxisTitle = (widgetData[0].unit !== '')
-  ? xaxisTitle = preferences.service_description + ' (' + widgetData[0].unit + ')'
-  : xaxisTitle;
+  //grid display
+  displayGrid = (preferences.display_grid === '0') ? displayGrid : true;
 
   /*
   BUILDING CHART OPTIONS
@@ -251,23 +250,28 @@ function buildChartOption() {
   options.chart.animations.easing = animationType;
   options.chart.animations.animateGradually.enabled = enableAnimations;
   options.chart.animations.dynamicAnimation.enabled = enableAnimations;
+  options.chart.events.dataPointSelection = function(event, chartContext, config) {
+    window.open(window.location.origin + '/centreon/main.php?p=20401&mode=0&svc_id='
+    + widgetData[config.seriesIndex].host_name + ';'
+    + widgetData[config.seriesIndex].service_description);
+  }
 
   //plot options
-  options.plotOptions.bar.dataLabels.position = datalabelsPosition;
+  // options.plotOptions.bar.dataLabels.position = datalabelsPosition;
 
   //dataLabels options
-  options.dataLabels.formatter = function (val, opts) {
-    if (convertedData[opts.seriesIndex].converted === true) {
-        return convertedData[opts.seriesIndex].value + ' ' + convertedData[opts.seriesIndex].unit;
-    } else {
-      return val + ' ' + convertedData[opts.seriesIndex].unit;
-    }
-  };
-  options.dataLabels.enabled = displayHostName;
-  options.dataLabels.textAnchor = datalabelsTextAnchor;
-  options.dataLabels.style.fontFamily = chartDesign.fontFamily.default;
-  options.dataLabels.style.fontSize = chartDesign.fontSize.dataLabels;
-  options.dataLabels.style.colors = chartDesign.colors.text;
+  // options.dataLabels.formatter = function (val, opts) {
+  //   if (convertedData[opts.seriesIndex].converted === true) {
+  //       return convertedData[opts.seriesIndex].value + ' ' + convertedData[opts.seriesIndex].unit;
+  //   } else {
+  //     return val + ' ' + convertedData[opts.seriesIndex].unit;
+  //   }
+  // };
+  options.dataLabels.enabled = false;
+  // options.dataLabels.textAnchor = datalabelsTextAnchor;
+  // options.dataLabels.style.fontFamily = chartDesign.fontFamily.default;
+  // options.dataLabels.style.fontSize = chartDesign.fontSize.dataLabels;
+  // options.dataLabels.style.colors = chartDesign.colors.text;
 
   //title options
   options.title.text = chartTitle;
@@ -287,23 +291,30 @@ function buildChartOption() {
   //axis options
   options.yaxis.labels.style.cssClass = chartDesign.css.yAxis;
   options.yaxis.labels.style.fontFamily = chartDesign.fontFamily.default;
+  // options.yaxis.labels.formatter = function(val, index) {
+  //   console.log(val);
+  // }
+
   options.xaxis.categories = categories;
   options.xaxis.title.text = xaxisTitle;
   options.xaxis.title.style.fontSize = chartDesign.fontSize.xAxis;
   options.xaxis.title.style.fontFamily = chartDesign.fontFamily.default;
   options.xaxis.title.style.cssClass = chartDesign.css.xAxis;
+  options.xaxis.labels.formatter = function(value){
+    let convertedChartLabel = convertUnit(value, widgetData[0].unit)
+    return convertedChartLabel.value + convertedChartLabel.unit;
+  }
+  options.xaxis.labels.show = true;
 
   //annotations
   if (preferences.enable_annotations === '1') {
     buildChartAnnotations();
   }
 
-  //on click event
-  options.chart.events.dataPointSelection = function(config) {
-    window.open(window.location.origin = '/centreon/main.php?p=20401&mode=0&svc_id='
-    + widgetData[config.seriesIndex].host_name + ';'
-    + widgetData[config.seriesIndex].service_description);
-  }
+  //grid options
+  options.grid.xaxis.lines.show = displayGrid;
+  options.grid.yaxis.lines.show = true;
+
   console.log('options');
   console.log(options);
   return options;

@@ -150,6 +150,7 @@ class  CentreonLiveMetric
 
         $query .="AND s.enabled = 1 "
              ."AND h.enabled = 1 "
+             ."AND s.perfdata != '' "
              ."GROUP BY i.host_id "
              ."ORDER BY current_value " . $preferences['order'] . " "
              ."LIMIT ".$preferences['nb_lin'].";";

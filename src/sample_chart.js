@@ -60,7 +60,7 @@ var options = {
     x: {
     },
     marker: {
-      show: false,
+      show: true,
     },
   },
   yaxis: {
@@ -82,24 +82,23 @@ var options = {
       style: {
       },
     },
-    axisTick: {
-      show: true,
-      borderType: 'solid',
-      height: 6,
-    }
   },
   stroke: {
   },
   grid: {
+    position: 'front',
     yaxis: {
       lines: {
-        show: false,
       },
     },
     xaxis: {
       lines: {
-        show: false,
       },
     },
   },
+  stroke: {
+                show: true,
+                width: 1,
+                colors: ['#fff']
+            },
 }
