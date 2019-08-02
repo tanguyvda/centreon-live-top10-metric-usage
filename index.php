@@ -59,6 +59,13 @@ try {
     echo $e->getMessage() . "<br/>";
 }
 
+//configure smarty
+$path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
+$template = new Smarty();
+$template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
+
+$preferences = $data->getPreferences();
+
 // check mandatory options
 if (!isset($preferences['service_description']) || is_null($preferences['service_description']) || $preferences['service_description'] == '') {
     $template->assign('warning', "you must set your service.");
@@ -69,11 +76,6 @@ if (!isset($preferences['service_description']) || is_null($preferences['service
         header('Content-Type: application/json');
         echo json_encode($data->getMetrics());
     } else {
-        //configure smarty
-        $path = $centreon_path . "www/widgets/centreon-live-top10-metric-usage/src/";
-        $template = new Smarty();
-        $template = initSmartyTplForPopup($path, $template, "./", $centreon_path);
-        $preferences = $data->getPreferences();
         $chartData = $data->getMetrics();
 
         if ($chartData['rowCount'] == 0) {
