@@ -27,18 +27,60 @@
         {assign var='adata' value=$chartData|@json_encode}
         {assign var='apreferences' value=$preferences|@json_encode}
         {if $chartData != "" && $chartData != NULL}
-			<div id="chart">
-				<script>
-					var widgetData = {$adata};
-					var preferences = {$apreferences};
-					var windowWidth = window.innerWidth;
-					const widgetId = {$widgetId};
-				</script>
-				<script type="text/javascript" src="resources/js/apexcharts.min.js" ></script>
-				<script type="text/javascript" src="src/sample_chart.js"></script>
-				<script type="text/javascript" src="class/centreonCharts.js"></script>
-		        <script type="text/javascript" src="src/chart.js"></script>
-			</div>
+		{assign var='serieCounter' value=0}
+    <script>
+    var widgetData = {$adata};
+    var preferences = {$apreferences};
+    var windowWidth = window.innerWidth;
+    const widgetId = {$widgetId};
+    </script>
+    <script type="text/javascript" src="resources/js/apexcharts.min.js" ></script>
+    <script type="text/javascript" src="src/progress_sample.js"></script>
+    <script type="text/javascript" src="class/liveMetric.js"></script>
+		{foreach item=v key=k from=$chartData}
+			{if $k !== 'rowCount'}
+				<div id="chart-{$serieCounter}" class='charts'>
+				</div>
+				{assign var=serieCounter value=$serieCounter+1}
+			{/if}
+		{/foreach}
+      {literal}
+      <script>
+      function updateChartData() {
+        jQuery.ajax({
+          url: './index.php',
+          type: 'GET',
+          data: {
+            widgetId: widgetId,
+            refreshChart: true
+          },
+          success: function (widgetData) {
+            try {
+              widgetChart.buildSerieData(false, widgetData);
+              parent.iResize(window.name, (parseFloat(widgetData.rowCount) + 3) * 30);
+              sleep().then(() => {
+                updateChartData();
+              });
+            } catch (error) {
+              console.error('Error while updating the serie: ' + error);
+            }
+          }
+        });
+      }
+
+      function sleep () {
+        return new Promise(resolve => setTimeout(resolve, 10 * 1000));
+      }
+      let widgetChart = new LiveMetric(options, preferences, widgetData);
+      let createChart = widgetChart.buildSerieData(true);
+			console.log('createChart :' + createChart);
+      if (createChart !== undefined) {
+        sleep().then(() => {
+          updateChartData();
+        });
+      }
+      </script>
+      {/literal}
 
 		<!-- print error if no data has been found	 -->
 		{else}

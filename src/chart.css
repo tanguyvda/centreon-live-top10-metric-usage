@@ -21,16 +21,18 @@
 
 @font-face {
     font-family: "Roboto Bold";
-    src:  url('../../../front_src/src/fonts/fonts-generated/roboto-Bold-webfont.woff2') format('woff2'),
-          url('../../../front_src/src/fonts/fonts-generated/roboto-Bold-webfont.woff') format('woff'),
-          url('../../../front_src/src/fonts/fonts-generated/roboto-Bold-webfont.ttf') format('truetype');
+    src:  url('../../../front_src/src/fonts/fonts-generated/roboto-bold-webfont.woff2') format('woff2'),
+          url('../../../front_src/src/fonts/fonts-generated/roboto-bold-webfont.woff') format('woff'),
+          url('../../../front_src/src/fonts/fonts-generated/roboto-bold-webfont.ttf') format('truetype');
 }
 
 body {
     margin: 0;
 }
 
-#chart {
+.charts {
+    border: 1px dashed red;
+    margin-bottom: 5px;
 }
 
 .alertMessage {
@@ -38,16 +40,17 @@ body {
     display: block;
 }
 
-/* .apexcharts-title-text {
-    font-weight: bold;
+.apexcharts-title-text {
     font-size: 20px;
-    font-family: sourcesans;
+    font-family: "Roboto Regular";
 }
 
 .apexcharts-subtitle-text {
-    font-family: sourcesans;
+    font-family: "Roboto Regular";
     font-size: 20px;
 }
+
+/*
 .apexcharts-datalabel {
     font-weight: bold;
     color: #000;

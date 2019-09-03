@@ -94,14 +94,15 @@ class  CentreonLiveMetric
         $preferences = $this->getPreferences();
 
         $query = "SELECT SQL_CALC_FOUND_ROWS i.host_name,
-        	i.service_description,
-        	i.service_id,
-        	i.host_id,
-        	m.current_value AS current_value,
+        	i.service_description AS serviceDescription,
+        	i.service_id AS serviceId,
+        	i.host_id AS hostId,
+        	m.current_value AS currentValue,
         	s.state AS status,
         	m.unit_name AS unit,
         	m.warn AS warning,
-        	m.crit AS critical ";
+        	m.crit AS critical,
+            m.max ";
 
         $query .= " FROM metrics m,
         	hosts h"
@@ -167,7 +168,9 @@ class  CentreonLiveMetric
         } catch (\Exception $e) {
             $template->assign('error', $e->getMessage());
         }
-
+        $file = fopen("/var/opt/rh/rh-php71/log/php-fpm/widget", "w") or die ("Unable to open file!");
+fwrite($file, print_r($res,true));
+fclose($file);
         while ($row = $res->fetch()) {
             $chartData[] = $row;
         }
