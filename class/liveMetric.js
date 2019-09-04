@@ -111,11 +111,12 @@ class LiveMetric {
   * @status {string} status code of the service
   * @return {object} contains start and end colors for the bar
   */
-  _setSerieColor (colors, status) {
+  _setSerieColors (colors, status) {
     let barColor = {
       startColor: colors.defaultStart,
       endColor: colors.defaultEnd
     };
+
     switch (status) {
       case '0' :
         barColor.startColor = colors.okStart;
@@ -131,6 +132,41 @@ class LiveMetric {
         break;
     }
     return barColor;
+  }
+
+  /**
+  * Converts numerical data to human readable data.
+  * @memberof LiveMetric
+  * @colors {object} contains colors data
+  * @status {string} status code of the service
+  * @return {object} contains start and end colors for the bar
+  */
+  _setDesignColors (colors, status, i) {
+    let chartDivStyle = document.getElementById('chart-' + i).childNodes[0].style;
+    let endColor;
+    let startColor;
+
+    switch (status) {
+      case '0' :
+        endColor = colors.okEnd;
+        startColor = colors.okStart;
+        break;
+      case '1' :
+        endColor = colors.warningEnd;
+        startColor = colors.warningStart;
+        break;
+      case '2' :
+        endColor = colors.criticalEnd;
+        startColor = colors.criticalStart;
+        break;
+      default :
+        endColor = colors.default;
+        startColor = '#65bcfd';
+    }
+    // trying to get a border...
+    chartDivStyle.borderWidth = '1px';
+    chartDivStyle.borderImage = 'linear-gradient(to right, ' + endColor + ', ' + startColor + ') 1';
+    console.log(chartDivStyle);
   }
 
   /**
@@ -180,7 +216,7 @@ class LiveMetric {
 
     for (let i = 0; i < this.widgetData.rowCount; i++) {
       if (this.preferences.enable_status_color === '1') {
-        barColor = this._setSerieColor(this.chartDesign.colors.bar, this.widgetData[i].status);
+        barColor = this._setSerieColors(this.chartDesign.colors.bar, this.widgetData[i].status, i);
       } else {
         barColor = {
           startColor: '#65bcfd',
@@ -204,6 +240,7 @@ class LiveMetric {
           data: [currentPercentage]
         }]);
         this._updateDynamicOption(i, barColor, serieData, currentPercentage);
+        this._setDesignColors(this.chartDesign.colors.bar, this.widgetData[i].status, i);
       }
     }
     return this.chart;
@@ -230,7 +267,6 @@ class LiveMetric {
     this.options.dataLabels.style.fontFamily = this.chartDesign.fontFamily.bold;
     this.options.dataLabels.style.fontSize = this.chartDesign.fontSize.dataLabels;
     this.options.xaxis.categories = [this.widgetData[i].host_name];
-    this.options.chart.width = '100%';
     // this.options.chart.events.dataPointSelection = function (event, chartContext, config) {
     //   window.open(window.location.origin + '/centreon/main.php?p=20401&mode=0&svc_id=' +
     //   hostName + ';' + serviceDescription);
@@ -288,5 +324,6 @@ class LiveMetric {
   _renderChart (i) {
     this.chart[i] = new ApexCharts(document.querySelector('#chart-' + i), this.options);
     this.chart[i].render();
+    this._setDesignColors(this.chartDesign.colors.bar, this.widgetData[i].status, i);
   }
 }

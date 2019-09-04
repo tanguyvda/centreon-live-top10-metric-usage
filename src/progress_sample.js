@@ -6,6 +6,7 @@ var options = {
     sparkline: {
       enabled: true
     },
+    width: '100%',
     events: {}
   },
   plotOptions: {
