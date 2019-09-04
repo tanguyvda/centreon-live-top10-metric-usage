@@ -4,7 +4,7 @@
         <email>contact@centreon.com</email>
         <website>http://www.centreon.com</website>
         <description>Widget for top 10 hosts depending on a specific metric</description>
-        <version>18.10.30</version>
+        <version>18.10.31</version>
         <keywords>centreon, widget, cpu</keywords>
         <screenshot></screenshot>
         <thumbnail>./widgets/centreon-live-top10-metric-usage/resources/logo1.png</thumbnail>
@@ -23,6 +23,7 @@
     		<option value="linear" label="linear"/>
     	</preference>
     	<preference label="Enable tooltip" name="enable_tooltip" defaultValue="1" type="boolean"/>
-        <preference label="Auto Refresh" name="autoRefresh" defaultValue="30" type="text"/>
+      <preference label="Auto Refresh" name="autoRefresh" defaultValue="30" type="text"/>
+      <preference label="Number of result (max 15)" name="nb_line" defaultValue="15" type="text"/>
 	</preferences>
 </configs>

@@ -145,16 +145,16 @@ class  CentreonLiveMetric
         }
 
         // for the sake of performance, we limit the number of results
-        if ($preferences['nb_lin'] > 15) {
-            $preferences['nb_lin'] = 15;
+        if ($preferences['nb_line'] > 15) {
+            $preferences['nb_line'] = 15;
         }
 
         $query .="AND s.enabled = 1 "
              ."AND h.enabled = 1 "
              ."AND s.perfdata != '' "
              ."GROUP BY i.host_id "
-             ."ORDER BY current_value " . $preferences['order'] . " "
-             ."LIMIT ".$preferences['nb_lin'].";";
+             ."ORDER BY current_value DESC "
+             ."LIMIT ".$preferences['nb_line'].";";
 
         // sending sql query
         $db = $this->dependencyInjector['realtime_db'];
